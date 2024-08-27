@@ -1,0 +1,12 @@
+.env
+
+Pipfile.lock
+
+# Virtual env metadata
+.venv
+
+# database
+*.db
+instance
+.vscode
+package-lock.json
