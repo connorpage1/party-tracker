@@ -18,6 +18,8 @@ class User(db.Model, SerializerMixin):
     
     serialize_only = ("id", "role_id")
     
+    parties = db.relationship('Party', back_populates='user')
+    
     def __init__(self, email, username, password_hash=None, **kwargs):
         super().__init__(email=email, username=username, **kwargs)
         if password_hash:

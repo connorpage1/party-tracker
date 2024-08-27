@@ -1,4 +1,4 @@
-from models.__init__ import SerializerMixin, validates, db
+from models.__init__ import SerializerMixin, validates, db, association_proxy
 
 class Package(db.Model, SerializerMixin):
     __tablename__ = 'packages'
@@ -15,4 +15,8 @@ class Package(db.Model, SerializerMixin):
 
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
+    
+    party_packages = db.relationship("PartyPackage", back_populates="package")
+    parties = association_proxy('party_packages', 'party')
+
     

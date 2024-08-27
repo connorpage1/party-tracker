@@ -14,3 +14,5 @@ class Contract(db.Model, SerializerMixin):
     
     
     serialize_rules = ("-terms",)
+    
+    party = db.relationship("Party", back_populates="contract")

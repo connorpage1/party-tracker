@@ -11,6 +11,7 @@ class Customer(db.Model, SerializerMixin):
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
     
+    parties = db.relationship("Party", back_populates='customer')
     
     @validates("email")
     def validate_email(self, _, email):

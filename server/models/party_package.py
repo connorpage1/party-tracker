@@ -10,3 +10,6 @@ class PartyPackage(db.Model, SerializerMixin):
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
     
+    party = db.relationship("Party", back_populates='party_packages')
+    package = db.relationship("Package", back_populates='party_packages')
+    
