@@ -1,11 +1,13 @@
-from models.__init__ import db, SerializerMixin, validates, flask_bcrypt, hybrid_property
+from models.__init__ import db, SerializerMixin, validates, flask_bcrypt, hybrid_property, re
 
 class User(db.Model, SerializerMixin):
     __tablename__ = 'users'
     
-    ROLE_MANAGER = 1
+    ROLE_ADMIN = 1
+    ROLE_MANAGER = 2
     
     id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String)
     username = db.Column(db.String, unique=True, nullable=False)
     email = db.Column(db.String, unique=True, nullable=False)
     _password_hash = db.Column('password', db.String, nullable=False)
@@ -13,6 +15,8 @@ class User(db.Model, SerializerMixin):
     
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
+    
+    serialize_only = ("id", "role_id")
     
     def __init__(self, email, username, password_hash=None, **kwargs):
         super().__init__(email=email, username=username, **kwargs)
@@ -32,3 +36,14 @@ class User(db.Model, SerializerMixin):
             raise ValueError("Passwords must be at least 8 characters")
         hashed_pw = flask_bcrypt.generate_password_hash(new_pw).decode("utf-8")
         self._password_hash = hashed_pw
+        
+    def authenticate(self, pw_to_check):
+        return flask_bcrypt.check_password_hash(self._password_hash, pw_to_check)
+    
+    @validates("email")
+    def validate_email(self, _, email):
+        if not isinstance(email, str):
+            raise TypeError("Email must be a string")
+        elif not re.match(r"^[\w\.-]+@([\w]+\.)+[\w-]{2,}$", email):
+            raise ValueError("Email must be in a proper format")
+        return email

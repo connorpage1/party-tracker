@@ -12,3 +12,5 @@ class Contract(db.Model, SerializerMixin):
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
     
+    
+    serialize_rules = ("-terms",)

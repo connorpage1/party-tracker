@@ -11,3 +11,11 @@ class Customer(db.Model, SerializerMixin):
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
     
+    
+    @validates("email")
+    def validate_email(self, _, email):
+        if not isinstance(email, str):
+            raise TypeError("Email must be a string")
+        elif not re.match(r"^[\w\.-]+@([\w]+\.)+[\w-]{2,}$", email):
+            raise ValueError("Email must be in a proper format")
+        return email
