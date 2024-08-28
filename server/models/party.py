@@ -26,10 +26,11 @@ class Party(db.Model, SerializerMixin):
     
     @validates("name", "status", "organization")
     def validate_strings(self, key, value):
-        if not isinstance(value, str):
-            raise TypeError(f"{key} must be a string")
-        elif len(value) < 1:
-            raise ValueError(f"{key} must be at least one character long")
+        if value:
+            if not isinstance(value, str):
+                raise TypeError(f"{key} must be a string")
+            elif len(value) < 1:
+                raise ValueError(f"{key} must be at least one character long")
         return value
     
     # @validates("date_and_start_time")

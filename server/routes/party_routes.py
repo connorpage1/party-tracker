@@ -34,7 +34,17 @@ class Parties(Resource):
     def post(self):
         try:
             data = request.get_json()
-            new_party = Party(**data)
+            date_and_start_time = datetime.fromisoformat(data['date_and_start_time'])
+            end_time = datetime.fromisoformat(data['end_time'])
+            new_party = Party(
+                name=data.get('name'),
+                date_and_start_time=date_and_start_time, 
+                end_time=end_time,
+                status=data.get('status'),
+                organization=data.get('organization'),
+                customer_id=data.get('customer_id'),
+                user_id=data.get('user_id')
+                )
             db.session.add(new_party)
             db.session.commit()
             return make_response(new_party.to_dict(), 201)
