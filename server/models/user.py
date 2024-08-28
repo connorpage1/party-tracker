@@ -49,3 +49,22 @@ class User(db.Model, SerializerMixin):
         elif not re.match(r"^[\w\.-]+@([\w]+\.)+[\w-]{2,}$", email):
             raise ValueError("Email must be in a proper format")
         return email
+    @property
+    def role(self):
+        """Converts role_id to role name."""
+        if self.role_id == self.ROLE_ADMIN:
+            return "admin"
+        elif self.role_id == self.ROLE_MANAGER:
+            return "seller"
+        else:
+            return "unknown"
+
+    @role.setter
+    def role(self, role_name):
+        """Sets role_id based on the role name."""
+        if role_name == "admin":
+            self.role_id = self.ROLE_ADMIN
+        elif role_name == "manager":
+            self.role_id = self.ROLE_MANAGER
+        else:
+            raise ValueError("Invalid role name")

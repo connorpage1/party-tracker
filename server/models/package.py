@@ -21,4 +21,34 @@ class Package(db.Model, SerializerMixin):
     party_packages = db.relationship("PartyPackage", back_populates="package")
     parties = association_proxy('party_packages', 'party')
 
-    
+    @property
+    def package_type(self):
+        """Converts role_id to role name."""
+        if self.type_id == self.TYPE_FOOD:
+            return "food"
+        elif self.type_id == self.TYPE_BAR_PACKAGE:
+            return "bar package"
+        elif self.type_id == self.TYPE_BAR_MIN_SPEND:
+            return "minimum spend"
+        elif self.type_id == self.TYPE_ROOM_FEE:
+            return "room fee"
+        elif self.type_id == self.TYPE_CLEANING_FEE:
+            return "cleaning fee"
+        else:
+            return "unknown"
+
+    @package_type.setter
+    def package_type(self, type_name):
+        """Sets role_id based on the role name."""
+        if type_name == "food":
+            self.type_id = self.TYPE_FOOD
+        elif type_name == "bar package":
+            self.type_id = self.TYPE_BAR_PACKAGE
+        elif type_name == "minimum spend":
+            self.type_id = self.TYPE_BAR_MIN_SPEND
+        elif type_name == "room fee":
+            self.type_id = self.TYPE_ROOM_FEE
+        elif type_name == "cleaning fee":
+            self.type_id = self.TYPE_CLEANING_FEE
+        else:
+            raise ValueError("Invalid role name")
