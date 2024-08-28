@@ -19,8 +19,10 @@ class Party(db.Model, SerializerMixin):
     customer = db.relationship("Customer", back_populates="parties")
     contract = db.relationship("Contract", back_populates='party')
     user = db.relationship("User", back_populates="parties")
-    party_packages = db.relationship("PartyPackage", back_populate='party')
+    party_packages = db.relationship("PartyPackage", back_populates='party')
     packages = association_proxy('party_packages', 'package')
+    
+    serialize_only = ('name', 'date_and_start_time', 'end_time', 'status')
     
     @validates("name", "status", "organization")
     def validate_strings(self, key, value):
@@ -30,8 +32,8 @@ class Party(db.Model, SerializerMixin):
             raise ValueError(f"{key} must be at least one character long")
         return value
     
-    @validates("date_and_start_time")
-    def date_in_future(self, _, date_time):
-        if date_time < datetime.now():
-            raise ValueError("Start date must be in the future")
-        return date_time
+    # @validates("date_and_start_time")
+    # def date_in_future(self, _, date_time):
+    #     if date_time < datetime.now():
+    #         raise ValueError("Start date must be in the future")
+    #     return date_time
