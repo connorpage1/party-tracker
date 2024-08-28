@@ -61,3 +61,30 @@ class PartiesById(Resource):
             return make_response({'error': f'No party found with id {id}'}, 404)
         except Exception as e:
             return make_response({'error': str(e)}, 400)
+    
+    def patch(self, id):
+        try:
+            data = request.get_json()
+            if party := db.session.get(Party, id):
+                for attr, value in data.items():
+                    if value:
+                        if attr in ['date_and_start_time', 'end_time']:
+                            value = datetime.fromisoformat(value)
+                        setattr(party, attr, value)    
+                db.session.commit()
+                return make_response(party.to_dict(), 200)
+            return make_response({'error': f'No party found with id {id}'}, 404)
+        except Exception as e:
+            db.session.rollback()
+            return make_response({'error': str(e)}, 400)
+        
+    
+    def delete(self, id):
+        try:
+            if party := db.session.get(Party, id):
+                db.session.delete(party)
+                db.session.commit()
+                return make_response({}, 204)
+        except Exception as e:
+            db.session.rollback()
+            return make_response({"error": str(e)}, 400)
