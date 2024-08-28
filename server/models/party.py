@@ -33,6 +33,8 @@ class Party(db.Model, SerializerMixin):
                 raise ValueError(f"{key} must be at least one character long")
         return value
     
+    #! Might want to implement this validation in the future, 
+    #! but for now want to be able to add past parties
     # @validates("date_and_start_time")
     # def date_in_future(self, _, date_time):
     #     if date_time < datetime.now():
