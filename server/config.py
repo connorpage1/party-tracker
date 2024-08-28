@@ -6,7 +6,9 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import MetaData
 from flask_bcrypt import Bcrypt
 from flask_session import Session
+from flask_jwt_extended import JWTManager
 from os import environ
+from datetime import timedelta
 
 
 app = Flask(__name__)
@@ -27,8 +29,14 @@ db = SQLAlchemy(metadata=metadata)
 migrate = Migrate(app, db)
 db.init_app(app)
 
-app.config["SESSION_TYPE"] = "sqlalchemy"
-app.config["SESSION_SQLALCHEMY"] = db
+# flask_jwt_extended configuration
+jwt = JWTManager(app)
+app.config["JWT_SECRET_KEY"] = environ.get("JWT_SECRET_KEY")
+app.config["JWT_TOKEN_LOCATION"] = ["cookies"]
+app.config["JWT_COOKIE_SECURE"] = False #! https vs http — change for deployment
+app.config["JWT_CSRF_IN_COOKIES"] = True  #! double CSRF protection
+app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(days=15)
+
 
 # Instantiate REST API
 api = Api(app, prefix='/api/v1')

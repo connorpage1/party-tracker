@@ -16,7 +16,7 @@ class User(db.Model, SerializerMixin):
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
     
-    serialize_only = ("id", "role_id")
+    serialize_only = ("username", "id", "role_id")
     
     parties = db.relationship('Party', back_populates='user')
     

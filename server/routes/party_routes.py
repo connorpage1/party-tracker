@@ -1,7 +1,8 @@
-from routes.__init__ import Party, Resource, make_response, datetime, request
+from routes.__init__ import Party, Resource, make_response, datetime, request, jwt_required
 from config import db
 
 class Parties(Resource):
+    @jwt_required()
     def get(self):
         future = None
         year = None
@@ -31,6 +32,7 @@ class Parties(Resource):
         except Exception as e:
             return make_response({'error': str(e)}, 404)
         
+    @jwt_required()
     def post(self):
         try:
             data = request.get_json()
@@ -54,6 +56,7 @@ class Parties(Resource):
 
 
 class PartiesById(Resource):
+    @jwt_required()
     def get(self, id):
         try:
             if party := db.session.get(Party, id):
@@ -62,6 +65,7 @@ class PartiesById(Resource):
         except Exception as e:
             return make_response({'error': str(e)}, 400)
     
+    @jwt_required()
     def patch(self, id):
         try:
             data = request.get_json()
@@ -79,6 +83,7 @@ class PartiesById(Resource):
             return make_response({'error': str(e)}, 400)
         
     
+    @jwt_required()
     def delete(self, id):
         try:
             if party := db.session.get(Party, id):

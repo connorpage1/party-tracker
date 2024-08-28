@@ -1,14 +1,16 @@
-from routes.__init__ import Customer, Resource, make_response, datetime, request
+from routes.__init__ import Customer, Resource, make_response, datetime, request, jwt_required
 from config import db
 from sqlite3 import IntegrityError
 
 class Customers(Resource):
+    @jwt_required()
     def get(self):
         try:
             customers = db.session.execute(db.select(Customer)).scalars().all()
             return make_response([customer.to_dict() for customer in customers], 200)
         except Exception as e:
             return make_response({'error': str(e)}, 400)
+    @jwt_required()
     def post(self):
         try:
             data = request.get_json()
@@ -25,6 +27,7 @@ class Customers(Resource):
             return make_response({'error': str(e)}, 400)
         
 class CustomerById(Resource):
+    @jwt_required()
     def get(self, id):
         try:
             if customer := db.session.get(Customer, id):
@@ -32,6 +35,7 @@ class CustomerById(Resource):
             return make_response({'error': f'No customer with id {id}'}, 404)
         except Exception as e:
             return make_response({'error': str(e)}, 400)
+    @jwt_required()
     def patch(self, id):
         try:
             if customer := db.session.get(Customer, id):
@@ -45,6 +49,7 @@ class CustomerById(Resource):
             db.session.rollback()
             return make_response({'error': str(e)}, 400)
 
+    @jwt_required()
     def delete(self, id):
         try:
             if customer := db.session.get(Customer, id):
