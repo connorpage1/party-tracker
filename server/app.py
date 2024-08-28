@@ -10,7 +10,7 @@ from models.party_package import PartyPackage
 
 from config import app, db, api
 from routes.party_routes import Parties, PartiesById
-from routes.customer_routes import Customers
+from routes.customer_routes import Customers, CustomerById
 
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 DATABASE = os.environ.get("DB_URI", f"sqlite:///{os.path.join(BASE_DIR, 'app.db')}")
@@ -18,6 +18,7 @@ DATABASE = os.environ.get("DB_URI", f"sqlite:///{os.path.join(BASE_DIR, 'app.db'
 api.add_resource(Parties, '/parties')
 api.add_resource(PartiesById, '/parties/<int:id>')
 api.add_resource(Customers, '/customers')
+api.add_resource(CustomerById, '/customers/<int:id>')
 
 if __name__ == "__main__":
     app.run(port=5555, debug=True)
