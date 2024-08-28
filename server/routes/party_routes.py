@@ -1,5 +1,4 @@
-from routes.__init__ import Party, Resource, make_response, datetime, request, jwt_required
-from config import db
+from routes.__init__ import Party, Resource, make_response, datetime, request, jwt_required, db
 
 class Parties(Resource):
     @jwt_required()

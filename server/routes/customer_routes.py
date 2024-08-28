@@ -1,6 +1,4 @@
-from routes.__init__ import Customer, Resource, make_response, datetime, request, jwt_required
-from config import db
-from sqlite3 import IntegrityError
+from routes.__init__ import Customer, Resource, make_response, datetime, request, jwt_required, db
 
 class Customers(Resource):
     @jwt_required()
