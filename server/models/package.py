@@ -6,11 +6,13 @@ class Package(db.Model, SerializerMixin):
     TYPE_FOOD = 1
     TYPE_BAR_PACKAGE = 2
     TYPE_BAR_MIN_SPEND = 3
+    TYPE_ROOM_FEE = 4
+    TYPE_CLEANING_FEE = 5
     
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
     type_id = db.Column(db.Integer)
-    description = db.Column(db.String)
+    per_head = db.Column(db.Boolean, default=False)
     price = db.Column(db.Float)
 
     created_at = db.Column(db.DateTime, server_default=db.func.now())

@@ -10,6 +10,7 @@ class Party(db.Model, SerializerMixin):
     end_time = db.Column(db.DateTime, nullable=False)
     status = db.Column(db.String, nullable=False)
     organization = db.Column(db.String)
+    guest_number = db.Column(db.Integer)
     customer_id = db.Column(db.Integer, db.ForeignKey('customers.id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     

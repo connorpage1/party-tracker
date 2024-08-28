@@ -1,6 +1,6 @@
 from models.party import Party
 from models.customer import Customer
-from datetime import datetime, timedelta
+from datetime import datetime
 
 party_1 = Party(name="Engagement Party", date_and_start_time=datetime.now(), end_time=datetime.now(), status='confirmed', organization='LCMC',customer_id=1, user_id=1)
 
