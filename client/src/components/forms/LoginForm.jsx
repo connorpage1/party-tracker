@@ -10,6 +10,7 @@ import {
     Message,
     Container,
     Image,
+    Icon,
 } from "semantic-ui-react";
 import toast from "react-hot-toast";
 
@@ -19,6 +20,12 @@ const schema = yup.object().shape({
 })
 
 const LoginForm = () => {
+    const [showPassword, setShowPassword] = useState(false);
+
+    const togglePasswordVisibility = () => {
+        setShowPassword(!showPassword);
+    };
+
     const handleFormSubmit = (formData, { setSubmitting, setErrors }) => {
         fetch("/api/v1/login", {
             method: "POST",
@@ -33,7 +40,7 @@ const LoginForm = () => {
                         .json()
                         .then((userObj) => {
                             //updateUser(userObj);
-                            console.log(userObj) ;
+                            console.log(userObj);
                         })
                 } else {
                     res.json().then((error) => {
@@ -42,7 +49,7 @@ const LoginForm = () => {
                                 password_hash: "Incorrect email or password",
                             });
                         } else {
-                            toast.error(error.error || "An unexpected error occured");
+                            toast.error(error.error || "An unexpected error occurred");
                         }
                     });
                 }
@@ -84,8 +91,14 @@ const LoginForm = () => {
                                     <label htmlFor="password_hash">Password</label>
                                     <Field
                                         name="password_hash"
-                                        type="password"
+                                        type={showPassword ? "text" : "password"}
                                         as={SemanticForm.Input}
+                                        icon={
+                                            <Icon
+                                                name={showPassword ? 'eye slash outline' : 'eye'}
+                                                link
+                                                onClick={togglePasswordVisibility}
+                                            />}
                                         fluid
                                     />
                                     <ErrorMessage
