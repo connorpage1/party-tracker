@@ -1,10 +1,122 @@
+from random import choice as rc
+
+from faker import Faker
+
+from config import app, db
 from models.party import Party
 from models.customer import Customer
+from models.package import Package
+from models.party_package import PartyPackage
+from models.user import User
+from models.contract import Contract
+
 from datetime import datetime
 
-party_1 = Party(name="Engagement Party", date_and_start_time=datetime.now(), end_time=datetime.now(), status='confirmed', organization='LCMC',customer_id=1, user_id=1)
+fake = Faker()
 
-party_3 = Party(name="Test 2", date_and_start_time=datetime(2024, 9, 13, hour=7), end_time=datetime(2024, 9, 13, hour=10), status='pending', organization='LCMC',customer_id=1, user_id=1)
 
-c=Customer(name='connor', email="connor@page.com", phone='504-111-1111')
-c2 = Customer(name='test2', email='valid@email.com', phone='504-901-9010')
+def seed_data():
+    with app.app_context():
+        Contract.query.delete()
+        PartyPackage.query.delete()
+        Package.query.delete()
+        Party.query.delete()
+        Customer.query.delete()
+        User.query.delete()
+        
+        admin = User(name="Connor", username="connor", email='connor@page.com', password_hash='password', role='admin')
+        
+        db.session.add(admin)
+        db.session.commit()
+        
+        users = []
+        for _ in range(20):
+            name=fake.name()
+            username=fake.user_name()
+            email=fake.email()
+            password_hash = 'password'
+            role_id = 2
+            
+            user = User(name=name, username=username, email=email, password_hash=password_hash, role_id=role_id)
+            
+            db.session.add(user)
+            users.append(user)
+        
+        db.session.commit()
+        
+        customers = []
+        for _ in range(50):
+            name=fake.name()
+            email=fake.email()
+            phone=fake.phone_number()
+            
+            customer = Customer(name=name, email=email, phone=phone)
+            
+            db.session.add(customer)
+            customers.append(customer)
+        
+        db.session.commit()
+        
+        parties = []
+        for _ in range(100):
+            name = fake.word()
+            start = fake.date_this_year()
+            end = fake.date_this_year()
+            status = rc(["tentative", 'pending', 'confirmed'])
+            org = fake.word()
+            customer = rc([customer.id for customer in customers])
+            user = rc([user.id for user in users])
+            guests = 100
+            
+            party = Party(name=name, date_and_start_time=start, end_time=end, status=status, organization=org, customer_id=customer, user_id=user, guest_number=guests)
+            
+            db.session.add(party)
+            parties.append(party)
+        
+        db.session.commit()
+        
+        packages = []
+        package_1 = Package(name="Full Tchoup", type_id=2, price=38, per_head=1)
+        package_2 = Package(name="Taco Bar", type_id=1, price=380, per_head=0)
+        
+        packages.append(package_1) 
+        packages.append(package_2) 
+        db.session.add(package_1)
+        db.session.add(package_2)
+        
+        db.session.commit()
+        
+        party_packages = []
+        for _ in range(500):
+            party = rc([party.id for party in parties])
+            package = rc([package.id for package in packages])
+            description = fake.sentence()
+            
+            party_package = PartyPackage(party_id = party, package_id=package, description=description)
+            
+            db.session.add(party_package)
+            party_packages.append(party_package)
+            
+        db.session.commit()
+        
+        contracts = []
+        for party in parties:
+            terms = fake.sentence()
+            date = rc([fake.date_this_month(), None])
+            if date:
+                status='signed'
+            else:
+                status='pending'
+            party_id = party.id
+            
+            contract = Contract(terms=terms, date_signed=date, status=status, party_id=party_id)
+            db.session.add(contract)
+            contracts.append(contract)
+        db.session.commit()
+        
+        print('Seeding complete')
+    
+if __name__ == "__main__":
+    seed_data()
+        
+
