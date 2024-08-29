@@ -109,7 +109,7 @@ const LoginForm = () => {
                                 </SemanticForm.Field>
 
                                 <Button
-                                    className="login-signup"
+                                    className="login"
                                     type="submit"
                                     fluid
                                     primary

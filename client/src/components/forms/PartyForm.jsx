@@ -3,7 +3,7 @@
 const PartyForm = () => {
     return(
         <div className="party-form">
-
+            
         </div>
     )
 }
