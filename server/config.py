@@ -1,5 +1,5 @@
 from flask import Flask
-# from flask_cors import CORS
+from flask_cors import CORS
 from flask_migrate import Migrate
 from flask_restful import Api
 from flask_sqlalchemy import SQLAlchemy
@@ -37,6 +37,9 @@ app.config["JWT_COOKIE_SECURE"] = False #! https vs http — change for deployme
 app.config["JWT_CSRF_IN_COOKIES"] = True  #! double CSRF protection
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(days=15)
 
+
+# Instantiate CORS
+CORS(app)
 
 # Instantiate REST API
 api = Api(app, prefix='/api/v1')
