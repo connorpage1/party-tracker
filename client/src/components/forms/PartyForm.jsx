@@ -1,7 +1,7 @@
 import * as yup from "yup";
 import { useFormik } from "formik";
 import { useState } from "react";
-import { Form as SemanticForm, Dropdown } from "semantic-ui-react";
+import { Header, Segment, Form as SemanticForm} from "semantic-ui-react";
 import _ from 'lodash';
 
 const schema = yup.object().shape({
@@ -90,82 +90,89 @@ const PartyForm = () => {
     return (
         <div className="party-form">
             <SemanticForm onSubmit={formik.handleSubmit}>
-                <SemanticForm.Field>
-                    <label htmlFor="customer_email">Email</label>
-                    <input
-                        name="customer_email"
-                        type="email"
-                        placeholder="Search for customer by email or enter new email"
-                        value={formik.values.customer_email}
-                        autoComplete="off"
-                        onChange={(e) => {
-                            const email = e.target.value;
-                            formik.setFieldValue('customer_email', email);
-                            debouncedSearch(email);
-                            setIsCustomerSelected(false);
-                        }}
-                    />
-                {/* Custom autocomplete suggestion list */}
-                {dropdownOpen && searchResults.length > 0 && (
-                        <div className="autocomplete-dropdown">
-                            {searchResults.map((customer) => (
-                                <div
-                                    key={customer.id}
-                                    className="autocomplete-item"
-                                    onClick={() => {
-                                        formik.setFieldValue('customer_email', customer.email);
-                                        formik.setFieldValue('customer_first_name', customer.first_name);
-                                        formik.setFieldValue('customer_last_name', customer.last_name);
-                                        formik.setFieldValue('customer_phone_number', customer.phone);
-                                        setIsCustomerSelected(true);
-                                        setDropdownOpen(false);  // Close dropdown after selection
-                                        setCustomerId(customer.id)
-                                    }}
-                                >
-                                    {`${customer.email} - ${customer.first_name} ${customer.last_name}`}
-                                </div>
-                            ))}
-                        </div>
-                    )}
-                </SemanticForm.Field>
+                <Segment>
+                    <Header as="h3">Customer Information</Header>
 
-                {/* Customer First Name Field */}
-                <SemanticForm.Field>
-                    <label htmlFor="customer_first_name">First Name</label>
-                    <input
-                        name="customer_first_name"
-                        type="text"
-                        placeholder="Enter first name"
-                        value={formik.values.customer_first_name}
-                        onChange={formik.handleChange}
-                        disabled={isCustomerSelected}  // Disable if customer is selected
-                    />
-                </SemanticForm.Field>
-                {/* Customer Last Name Field */}
-                <SemanticForm.Field>
-                    <label htmlFor="customer_last_name">Last Name</label>
-                    <input
-                        name="customer_last_name"
-                        type="text"
-                        placeholder="Enter last name"
-                        value={formik.values.customer_last_name}
-                        onChange={formik.handleChange}
-                        disabled={isCustomerSelected}  // Disable if customer is selected
-                    />
-                </SemanticForm.Field>
+                    <SemanticForm.Field>
+                        <label htmlFor="customer_email">Email</label>
+                        <input
+                            name="customer_email"
+                            type="email"
+                            placeholder="Search for customer by email or enter new email"
+                            value={formik.values.customer_email}
+                            autoComplete="off"
+                            onChange={(e) => {
+                                const email = e.target.value;
+                                formik.setFieldValue('customer_email', email);
+                                debouncedSearch(email);
+                                setIsCustomerSelected(false);
+                            }}
+                        />
+                    {/* Custom autocomplete suggestion list */}
+                    {dropdownOpen && searchResults.length > 0 && (
+                            <div className="autocomplete-dropdown">
+                                {searchResults.map((customer) => (
+                                    <div
+                                        key={customer.id}
+                                        className="autocomplete-item"
+                                        onClick={() => {
+                                            formik.setFieldValue('customer_email', customer.email);
+                                            formik.setFieldValue('customer_first_name', customer.first_name);
+                                            formik.setFieldValue('customer_last_name', customer.last_name);
+                                            formik.setFieldValue('customer_phone_number', customer.phone);
+                                            setIsCustomerSelected(true);
+                                            setDropdownOpen(false);  // Close dropdown after selection
+                                            setCustomerId(customer.id)
+                                        }}
+                                    >
+                                        {`${customer.email} - ${customer.first_name} ${customer.last_name}`}
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                    </SemanticForm.Field>
 
-                {/* Customer Phone Number Field */}
-                <SemanticForm.Field>
-                    <label htmlFor="customer_phone_number">Phone Number</label>
-                    <input
-                        name="customer_phone_number"
-                        type="text"
-                        placeholder="Enter phone number"
-                        value={formik.values.customer_phone_number}
-                        onChange={formik.handleChange}
-                        disabled={isCustomerSelected}  // Disable if customer is selected
-                    />
-                </SemanticForm.Field>
+                    {/* Customer First Name Field */}
+                    <SemanticForm.Field>
+                        <label htmlFor="customer_first_name">First Name</label>
+                        <input
+                            name="customer_first_name"
+                            type="text"
+                            placeholder="Enter first name"
+                            value={formik.values.customer_first_name}
+                            autoComplete="off"
+                            onChange={formik.handleChange}
+                            disabled={isCustomerSelected}  // Disable if customer is selected
+                        />
+                    </SemanticForm.Field>
+                    {/* Customer Last Name Field */}
+                    <SemanticForm.Field>
+                        <label htmlFor="customer_last_name">Last Name</label>
+                        <input
+                            name="customer_last_name"
+                            type="text"
+                            placeholder="Enter last name"
+                            value={formik.values.customer_last_name}
+                            autoComplete="off"
+                            onChange={formik.handleChange}
+                            disabled={isCustomerSelected}  // Disable if customer is selected
+                        />
+                    </SemanticForm.Field>
+
+                    {/* Customer Phone Number Field */}
+                    <SemanticForm.Field>
+                        <label htmlFor="customer_phone_number">Phone Number</label>
+                        <input
+                            name="customer_phone_number"
+                            type="text"
+                            placeholder="Enter phone number"
+                            value={formik.values.customer_phone_number}
+                            autoComplete="off"
+                            onChange={formik.handleChange}
+                            disabled={isCustomerSelected}  // Disable if customer is selected
+                        />
+                    </SemanticForm.Field>
+                </Segment>
                 
                 {/* Date Field */}
                 <SemanticForm.Field>
