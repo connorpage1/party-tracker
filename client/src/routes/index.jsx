@@ -3,6 +3,7 @@ import App from "../App";
 import LoginForm from "../components/forms/LoginForm";
 import Landing from "../components/Landing";
 import PartyTable from "../components/party-table/PartyTable";
+import PartyForm from "../components/forms/PartyForm";
 
 export const router = createBrowserRouter([
   {
@@ -20,7 +21,12 @@ export const router = createBrowserRouter([
         {
           path: '/parties',
           element: <PartyTable />
+        },
+        {
+          path:'/parties/new',
+          element: <PartyForm />
         }
+
     ]
   }
 ])

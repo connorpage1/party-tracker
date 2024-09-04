@@ -3,9 +3,14 @@ from routes.__init__ import Customer, Resource, make_response, datetime, request
 class Customers(Resource):
     @jwt_required()
     def get(self):
+        email = request.args.get('email')
         try:
-            customers = db.session.execute(db.select(Customer)).scalars().all()
-            return make_response([customer.to_dict() for customer in customers], 200)
+            if email:
+                stmt = db.select(Customer).where(Customer.email.ilike(f"%{email}%"))
+                customers = db.session.execute(stmt).scalars().all()  
+            else:
+                customers = db.session.execute(db.select(Customer)).scalars().all()
+            return make_response({'customers': [customer.to_dict() for customer in customers]}, 200)
         except Exception as e:
             return make_response({'error': str(e)}, 400)
     @jwt_required()
