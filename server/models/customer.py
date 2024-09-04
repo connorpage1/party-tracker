@@ -4,7 +4,8 @@ class Customer(db.Model, SerializerMixin):
     __tablename__ = 'customers'
     
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String)
+    first_name = db.Column(db.String)
+    last_name = db.Column(db.String)
     email = db.Column(db.String, unique=True)
     phone = db.Column(db.String)
     

@@ -10,7 +10,7 @@ from models.party_package import PartyPackage
 from models.user import User
 from models.contract import Contract
 
-from datetime import datetime
+from datetime import datetime, timedelta
 
 fake = Faker()
 
@@ -46,11 +46,12 @@ def seed_data():
         
         customers = []
         for _ in range(50):
-            name=fake.name()
+            first_name=fake.first_name()
+            last_name = fake.last_name()
             email=fake.email()
             phone=fake.phone_number()
             
-            customer = Customer(name=name, email=email, phone=phone)
+            customer = Customer(first_name=first_name, last_name=last_name, email=email, phone=phone)
             
             db.session.add(customer)
             customers.append(customer)
@@ -59,16 +60,17 @@ def seed_data():
         
         parties = []
         for _ in range(100):
-            name = fake.word()
-            start = fake.date_this_year()
-            end = fake.date_this_year()
+            theme = fake.word()
+            start = fake.date_time_between(start_date='now', end_date='+1y')
+            end = start + timedelta(hours=3)
             status = rc(["tentative", 'pending', 'confirmed'])
             org = fake.word()
             customer = rc([customer.id for customer in customers])
             user = rc([user.id for user in users])
             guests = 100
+            location = rc(['Little House', 'Full Warehouse', 'Partial Warehouse', 'Full Buyout', 'Terrace'])
             
-            party = Party(name=name, date_and_start_time=start, end_time=end, status=status, organization=org, customer_id=customer, user_id=user, guest_number=guests)
+            party = Party(theme=theme, date_and_start_time=start, end_time=end, status=status, organization=org, customer_id=customer, user_id=user, guest_number=guests, location=location)
             
             db.session.add(party)
             parties.append(party)

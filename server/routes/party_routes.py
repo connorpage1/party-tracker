@@ -19,7 +19,6 @@ class Parties(Resource):
                 return make_response({'error': str(e)}, 400)
         
         now = datetime.now()
-                
         query = db.select(Party).order_by(Party.date_and_start_time)
         
         try:
@@ -27,9 +26,9 @@ class Parties(Resource):
                 query = db.select(Party).where(Party.date_and_start_time.__ge__(now)).order_by(Party.date_and_start_time)
             elif year and month and day:
                 query = db.select(Party).where(Party.date_and_start_time.__ge__(datetime(year, month, day))).order_by(Party.date_and_start_time)
-            return make_response([party.to_dict() for party in db.session.scalars(query).all()])
+            return make_response([party.to_dict(rules=('location', 'guest_number')) for party in db.session.scalars(query).all()])
         except Exception as e:
-            return make_response({'error': str(e)}, 404)
+            return make_response({'error': str(e)}, 400)
         
     @jwt_required()
     def post(self):
@@ -38,7 +37,7 @@ class Parties(Resource):
             date_and_start_time = datetime.fromisoformat(data['date_and_start_time'])
             end_time = datetime.fromisoformat(data['end_time'])
             new_party = Party(
-                name=data.get('name'),
+                theme=data.get('theme'),
                 date_and_start_time=date_and_start_time, 
                 end_time=end_time,
                 status=data.get('status'),

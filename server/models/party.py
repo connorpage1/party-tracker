@@ -5,7 +5,7 @@ class Party(db.Model, SerializerMixin):
     __tablename__ = "parties"
     
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String)
+    theme = db.Column(db.String)
     date_and_start_time = db.Column(db.DateTime, nullable=False)
     end_time = db.Column(db.DateTime, nullable=False)
     status = db.Column(db.String, nullable=False)
@@ -13,6 +13,7 @@ class Party(db.Model, SerializerMixin):
     guest_number = db.Column(db.Integer)
     customer_id = db.Column(db.Integer, db.ForeignKey('customers.id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    location = db.Column(db.String, nullable=False)
     
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
@@ -23,9 +24,9 @@ class Party(db.Model, SerializerMixin):
     party_packages = db.relationship("PartyPackage", back_populates='party')
     packages = association_proxy('party_packages', 'package')
     
-    serialize_only = ('name', 'date_and_start_time', 'end_time', 'status')
+    serialize_only = ('theme', 'date_and_start_time', 'end_time', 'status')
     
-    @validates("name", "status", "organization")
+    @validates("theme", "status", "organization")
     def validate_strings(self, key, value):
         if value:
             if not isinstance(value, str):
