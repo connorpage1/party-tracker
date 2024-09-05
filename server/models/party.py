@@ -37,7 +37,6 @@ class Party(db.Model, SerializerMixin):
             return self.date_and_start_time + timedelta(hours=self.duration)
         return None
     
-
     
     @validates("theme", "status", "organization")
     def validate_strings(self, key, value):

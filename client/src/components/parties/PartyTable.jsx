@@ -10,6 +10,9 @@ import {
 import { useEffect, useState } from "react"
 import dateFormat from 'dateformat'
 import { Navigate, useNavigate } from 'react-router-dom'
+import { DateTime } from "luxon";
+
+
 const PartyTable = () => {
     const navigate = useNavigate()
     const [parties, setParties] = useState([])
@@ -61,14 +64,14 @@ const PartyTable = () => {
                 </TableHeader>
                 <TableBody>
                         {parties.map((party) => {
-                            const date = party.date_and_start_time
-                            const end_time = party.end_time
+                            const date = DateTime.fromSQL(party.date_and_start_time)
+                            const end_time = DateTime.fromSQL(party.end_time)
                             return(
                                 <TableRow className='party-table-row' key={party.id} onClick={() => navigate(`/parties/${party.id}`)}>
-                                    <TableCell>{dateFormat(date, 'dddd')}</TableCell>
-                                    <TableCell>{dateFormat(date, 'paddedShortDate')}</TableCell>
-                                    <TableCell>{dateFormat(date, 'h:MM tt')}</TableCell>
-                                    <TableCell>{dateFormat(end_time, 'h:MM tt')}</TableCell>
+                                    <TableCell>{date.toFormat('cccc')}</TableCell>
+                                    <TableCell>{date.toLocaleString(DateTime.DATE_SHORT)}</TableCell>
+                                    <TableCell>{date.toLocaleString(DateTime.TIME_SIMPLE)}</TableCell>
+                                    <TableCell>{end_time.toLocaleString(DateTime.TIME_SIMPLE)}</TableCell>
                                     <TableCell>{party.location}</TableCell>
                                     <TableCell>{party.guest_number}</TableCell>
                                     <TableCell>{party.organization ? party.organization : party.customer.last_name}</TableCell>

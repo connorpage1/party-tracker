@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Segment } from "semantic-ui-react";
+import { DateTime } from "luxon";
 
 function getCookie(name) {
     const value = `; ${document.cookie}`;
@@ -33,15 +34,36 @@ const PartyDetail = () => {
 
     if (Object.keys(party).length !== 0){
         const { party_packages, organization, theme, date_and_start_time, end_time, guest_number, status, location, customer, contract } = party
+        const date = DateTime.fromSQL(date_and_start_time)
+        const end = DateTime.fromSQL(end_time)
         return(
             <div className="party-details">
-                <h3 className="party-detail-header">Organization:</h3>
-                <h3 className="party-detail-header">Theme:</h3>
+                {
+                organization ? 
+                    <div className="organization-section">
+                        <h3 className="party-detail-header">Organization:</h3>
+                        <p className="party-detail-body">{organization}</p> 
+                    </div>: 
+                    <></> 
+                    }
+                    
+                    {
+                    theme ? 
+                        <div className="theme-section">
+                            <h3 className="party-detail-header">Theme:</h3>
+                            <p className="party-detail-body">{theme}</p> 
+                        </div>:
+                        <></> 
+                    }
                 <Segment>
                     <h3 className="party-detail-header">Day:</h3>
+                    <p className="party-detail-body">{date.toFormat('cccc')}</p>
                     <h3 className="party-detail-header">Date:</h3>
+                    <p className="party-detail-body">{date.toLocaleString(DateTime.DATE_SHORT)}</p>
                     <h3 className="party-detail-header">Start Time:</h3>
+                    <p className="party-detail-body">{date.toLocaleString(DateTime.TIME_SIMPLE)}</p>
                     <h3 className="party-detail-header">End Time:</h3>
+                    <p className="party-detail-body">{end.toLocaleString(DateTime.TIME_SIMPLE)}</p>
                 </Segment>
                 {party_packages.length !== 0 ? party_packages.map((party_package) => {
                     return (
@@ -60,12 +82,21 @@ const PartyDetail = () => {
 
                     
                 <h3 className="party-detail-header">Guest Number:</h3>
+                <p className="party-detail-body">{guest_number}</p>
                 <h3 className="party-detail-header">Status:</h3>
+                <p className="party-detail-body">{status}</p>
                 <h3 className="party-detail-header">Location:</h3>
-                <h3 className="party-detail-header">Customer Name:</h3>
-                <h3 className="party-detail-header">Contact Email:</h3>
-                <h3 className="party-detail-header">Contact Phone Number:</h3>
+                <p className="party-detail-body">{location}</p>
+                <Segment className="customer-info">
+                    <h3 className="party-detail-header">Customer Name:</h3>
+                <p className="party-detail-body">{guest_number}</p>
+                    <h3 className="party-detail-header">Contact Email:</h3>
+                <p className="party-detail-body">{guest_number}</p>
+                    <h3 className="party-detail-header">Contact Phone Number:</h3>
+                <p className="party-detail-body">{guest_number}</p>
+                </Segment>
                 <h3 className="party-detail-header">Total Price:</h3>
+                <p className="party-detail-body">{guest_number}</p>
             </div>
         )
     }
