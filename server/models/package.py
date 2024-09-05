@@ -14,6 +14,7 @@ class Package(db.Model, SerializerMixin):
     type_id = db.Column(db.Integer)
     per_head = db.Column(db.Boolean, default=False)
     price = db.Column(db.Float)
+    ph_rate_time_hours = db.Column(db.Float, default=2)
 
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())

@@ -18,6 +18,7 @@ class Party(db.Model, SerializerMixin):
     customer_id = db.Column(db.Integer, db.ForeignKey('customers.id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     location = db.Column(db.String, nullable=False)
+    discount = db.Column(db.Float, default=0)
     
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
@@ -52,8 +53,8 @@ class Party(db.Model, SerializerMixin):
         return {
             'id': self.id,
             'theme': self.theme,
-            'date_and_start_time': self.date_and_start_time,
-            'end_time': self.end_time,
+            'date_and_start_time': str(self.date_and_start_time),
+            'end_time': str(self.end_time),
             'status': self.status,
             'organization': self.organization,
             'guest_number': self.guest_number,
@@ -66,6 +67,8 @@ class Party(db.Model, SerializerMixin):
             'party_packages': [
                 {
                     'id': pp.id,
+                    'description': pp.description,
+                    'price_at_purchase': pp.price_at_purchase,
                     'package': pp.package.to_dict(rules=('-party_packages',))
                 } for pp in self.party_packages
             ]
