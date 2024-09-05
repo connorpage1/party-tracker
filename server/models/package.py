@@ -21,6 +21,7 @@ class Package(db.Model, SerializerMixin):
     party_packages = db.relationship("PartyPackage", back_populates="package")
     parties = association_proxy('party_packages', 'party')
 
+    serialize_rules = ('-party_packages.package', '-party_packages.party')
     @property
     def package_type(self):
         """Converts role_id to role name."""

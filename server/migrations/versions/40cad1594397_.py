@@ -1,8 +1,8 @@
-"""Add columns
+"""empty message
 
-Revision ID: 635ea721d43e
+Revision ID: 40cad1594397
 Revises: 
-Create Date: 2024-09-04 11:52:00.460669
+Create Date: 2024-09-05 11:18:37.905946
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '635ea721d43e'
+revision = '40cad1594397'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -56,7 +56,7 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('theme', sa.String(), nullable=True),
     sa.Column('date_and_start_time', sa.DateTime(), nullable=False),
-    sa.Column('end_time', sa.DateTime(), nullable=False),
+    sa.Column('duration', sa.Float(), nullable=False),
     sa.Column('status', sa.String(), nullable=False),
     sa.Column('organization', sa.String(), nullable=True),
     sa.Column('guest_number', sa.Integer(), nullable=True),
@@ -82,8 +82,8 @@ def upgrade():
     )
     op.create_table('party_packages',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('party_id', sa.String(), nullable=True),
-    sa.Column('package_id', sa.String(), nullable=True),
+    sa.Column('party_id', sa.Integer(), nullable=True),
+    sa.Column('package_id', sa.Integer(), nullable=True),
     sa.Column('description', sa.String(), nullable=True),
     sa.Column('price_at_purchase', sa.Float(), nullable=True),
     sa.Column('created_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=True),

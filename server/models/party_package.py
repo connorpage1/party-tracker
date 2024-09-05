@@ -4,8 +4,8 @@ class PartyPackage(db.Model, SerializerMixin):
     __tablename__ = 'party_packages'
     
     id = db.Column(db.Integer, primary_key=True)
-    party_id = db.Column(db.String, db.ForeignKey('parties.id'))
-    package_id = db.Column(db.String, db.ForeignKey('packages.id'))
+    party_id = db.Column(db.Integer, db.ForeignKey('parties.id'))
+    package_id = db.Column(db.Integer, db.ForeignKey('packages.id'))
     description = db.Column(db.String)
     price_at_purchase = db.Column(db.Float)
 
@@ -15,3 +15,4 @@ class PartyPackage(db.Model, SerializerMixin):
     party = db.relationship("Party", back_populates='party_packages')
     package = db.relationship("Package", back_populates='party_packages')
     
+    serialize_rules = ('-party.party_packages', '-package.party_packages')

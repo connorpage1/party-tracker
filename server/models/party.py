@@ -1,4 +1,7 @@
 from models.__init__ import SerializerMixin, validates, db, datetime, association_proxy
+from datetime import timedelta
+from sqlalchemy import event
+
 
 
 class Party(db.Model, SerializerMixin):
@@ -7,7 +10,8 @@ class Party(db.Model, SerializerMixin):
     id = db.Column(db.Integer, primary_key=True)
     theme = db.Column(db.String)
     date_and_start_time = db.Column(db.DateTime, nullable=False)
-    end_time = db.Column(db.DateTime, nullable=False)
+    duration = db.Column(db.Float, nullable=False)
+    end_time =db.Column(db.DateTime)
     status = db.Column(db.String, nullable=False)
     organization = db.Column(db.String)
     guest_number = db.Column(db.Integer)
@@ -24,7 +28,15 @@ class Party(db.Model, SerializerMixin):
     party_packages = db.relationship("PartyPackage", back_populates='party')
     packages = association_proxy('party_packages', 'package')
     
-    serialize_only = ('theme', 'date_and_start_time', 'end_time', 'status')
+    serialize_only = ('id', 'theme', 'date_and_start_time', 'end_time', 'status')
+    
+    @property
+    def end_time(self):
+        if self.date_and_start_time and self.duration:
+            return self.date_and_start_time + timedelta(hours=self.duration)
+        return None
+    
+
     
     @validates("theme", "status", "organization")
     def validate_strings(self, key, value):
@@ -35,6 +47,29 @@ class Party(db.Model, SerializerMixin):
                 raise ValueError(f"{key} must be at least one character long")
         return value
     
+    
+    def to_dict_custom(self):
+        return {
+            'id': self.id,
+            'theme': self.theme,
+            'date_and_start_time': self.date_and_start_time,
+            'end_time': self.end_time,
+            'status': self.status,
+            'organization': self.organization,
+            'guest_number': self.guest_number,
+            'location': self.location,
+            'customer': {
+                'id': self.customer.id,
+                'first_name': self.customer.first_name,
+                'last_name': self.customer.last_name
+            },
+            'party_packages': [
+                {
+                    'id': pp.id,
+                    'package': pp.package.to_dict(rules=('-party_packages',))
+                } for pp in self.party_packages
+            ]
+        }
     #! Might want to implement this validation in the future, 
     #! but for now want to be able to add past parties
     # @validates("date_and_start_time")
@@ -42,3 +77,4 @@ class Party(db.Model, SerializerMixin):
     #     if date_time < datetime.now():
     #         raise ValueError("Start date must be in the future")
     #     return date_time
+    

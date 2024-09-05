@@ -62,7 +62,7 @@ def seed_data():
         for _ in range(100):
             theme = fake.word()
             start = fake.date_time_between(start_date='now', end_date='+1y')
-            end = start + timedelta(hours=3)
+            duration = rc([1, 1.5, 2, 2.5, 3, 3.5])
             status = rc(["tentative", 'pending', 'confirmed'])
             org = fake.word()
             customer = rc([customer.id for customer in customers])
@@ -70,7 +70,7 @@ def seed_data():
             guests = 100
             location = rc(['Little House', 'Full Warehouse', 'Partial Warehouse', 'Full Buyout', 'Terrace'])
             
-            party = Party(theme=theme, date_and_start_time=start, end_time=end, status=status, organization=org, customer_id=customer, user_id=user, guest_number=guests, location=location)
+            party = Party(theme=theme, date_and_start_time=start, duration=duration, status=status, organization=org, customer_id=customer, user_id=user, guest_number=guests, location=location)
             
             db.session.add(party)
             parties.append(party)

@@ -1,13 +1,15 @@
 import * as yup from "yup";
 import { useFormik } from "formik";
 import { useState } from "react";
-import { Header, Segment, Form as SemanticForm} from "semantic-ui-react";
+import { Header, Segment, Form as SemanticForm } from "semantic-ui-react";
 import _ from 'lodash';
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const schema = yup.object().shape({
     date: yup.date("Please enter the date in the proper format").required("Please enter a date"),
     start_time: yup.string().required("Please enter a time"),
-    end_time: yup.string().required("Please enter an end time"),
+    duration: yup.string().required("Please enter a duration"),
     theme: yup.string(),
     status: yup.string(),
     organization: yup.string(),
@@ -19,12 +21,96 @@ const schema = yup.object().shape({
     customer_phone_number: yup.string()
 });
 
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+}
 const PartyForm = () => {
     const [searchResults, setSearchResults] = useState([]);
     const [customerId, setCustomerId] = useState(null);
     const [isCustomerSelected, setIsCustomerSelected] = useState(false);
     const [dropdownOpen, setDropdownOpen] = useState(false)
+    const navigate = useNavigate()
 
+    const handleFormSubmit = async (formikData) => {
+        try {
+            if (customerId) {
+                await postParty(formikData, customerId); // Customer already exists, directly create the party
+            } else {
+                const customer = await postCustomer(formikData); // Wait for customer creation
+                if (customer && customer.id) {
+                    await postParty(formikData, customer.id); // Use the newly created customer ID for the party
+                }
+            }
+            navigate('/parties')
+        } catch (error) {
+            console.error("Error handling form submission:", error);
+        }
+    };
+    
+    const postParty = async (data, custId,) => {
+        try {
+            const response = await fetch('/api/v1/parties', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": getCookie("csrf_access_token")
+                },
+                body: JSON.stringify({
+                    date_and_start_time: `${data.date} ${data.start_time}`,
+                    duration: data.duration,
+                    theme: data.theme,
+                    status: data.status,
+                    organization: data.organization,
+                    guest_number: data.guest_number,
+                    location: data.location,
+                    customer_id: custId,
+                    user_id: 1
+                    
+                }),
+            });
+            
+            if (!response.ok) {
+                throw new Error("Failed to submit form");
+            }
+            
+            console.log("Form submitted successfully");
+        } catch (error) {
+            console.error("Error submitting form:", error);
+            throw error;
+        }
+    };
+    
+    // Post customer and ensure it returns customer data
+    const postCustomer = async (data) => {
+        try {
+            const response = await fetch('/api/v1/customers', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": getCookie("csrf_access_token")
+                },
+                body: JSON.stringify({
+                    first_name: data.customer_first_name,
+                    last_name: data.customer_last_name,
+                    email: data.customer_email,
+                    phone: data.customer_phone_number
+                })
+            });
+            const customer = await response.json();
+
+            if (!response.ok) {
+                throw new Error("Failed to create customer");
+            }
+
+            return customer; // Return the customer object to use it in postParty
+        } catch (error) {
+            console.error("Error creating customer:", error);
+            throw error; // Rethrow to be handled in handleFormSubmit
+        }
+    };
+    
     const formik = useFormik({
         initialValues: {
             customer_first_name: '',
@@ -33,33 +119,9 @@ const PartyForm = () => {
             customer_email: ''
         },
         validationSchema: schema,
-        onSubmit: (values) => {
-            console.log(values);
-            // Handle form submission (call handleFormSubmit or other actions)
-        }
+        onSubmit: handleFormSubmit
     });
-
-    const handleFormSubmit = async () => {
-        try {
-            const response = await fetch('/api/v1/parties', {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRF-TOKEN": getCookie("csrf_access_token")
-                },
-                body: JSON.stringify(formik.values),
-            });
-
-            if (!response.ok) {
-                throw new Error("Failed to submit form");
-            }
-
-            console.log("Form submitted successfully");
-        } catch (error) {
-            console.error("Error submitting form:", error);
-        }
-    };
-
+    
     const searchCustomers = async (email) => {
         try {
             const response = await fetch(`/api/v1/customers?email=${email}`);
@@ -85,7 +147,7 @@ const PartyForm = () => {
             setSearchResults([]);
             setDropdownOpen(false)
         }
-    }, 300);
+    }, 500);
 
     return (
         <div className="party-form">
@@ -195,18 +257,21 @@ const PartyForm = () => {
                         placeholder="Enter start time"
                         value={formik.values.start_time}
                         onChange={formik.handleChange}
+                        step='900'
                     />
+            
                 </SemanticForm.Field>
 
                 {/* End Time Field */}
                 <SemanticForm.Field>
-                    <label htmlFor="end_time">End Time</label>
+                    <label htmlFor="duration">Duration (hours)</label>
                     <input
-                        name="end_time"
-                        type="time"
-                        placeholder="Enter end time"
-                        value={formik.values.end_time}
+                        name="duration"
+                        type="number"
+                        placeholder="Enter duration"
+                        value={formik.values.duration}
                         onChange={formik.handleChange}
+                        step='0.25'
                     />
                 </SemanticForm.Field>
 
@@ -220,6 +285,7 @@ const PartyForm = () => {
                         value={formik.values.theme}
                         onChange={formik.handleChange}
                     />
+                    
                 </SemanticForm.Field>
 
                 {/* Status Field */}
@@ -232,6 +298,7 @@ const PartyForm = () => {
                         value={formik.values.status}
                         onChange={formik.handleChange}
                     />
+                    
                 </SemanticForm.Field>
 
                 {/* Organization Field */}

@@ -14,6 +14,9 @@ class Customer(db.Model, SerializerMixin):
     
     parties = db.relationship("Party", back_populates='customer')
     
+    serialize_rules = ('-parties.customer',)
+
+    
     @validates("email")
     def validate_email(self, _, email):
         if not isinstance(email, str):

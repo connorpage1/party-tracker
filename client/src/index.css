@@ -85,3 +85,8 @@ button:focus-visible {
 .autocomplete-item:hover {
   background-color: #f0f0f0;
 }
+
+.party-table-row:hover{
+  background-color: red;
+  cursor: pointer;
+}
