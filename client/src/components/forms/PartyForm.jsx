@@ -1,7 +1,7 @@
 import * as yup from "yup";
 import { useFormik } from "formik";
 import { useState } from "react";
-import { Header, Segment, Form as SemanticForm, Label, Grid } from "semantic-ui-react";
+import { Header, Segment, Form as SemanticForm, Label } from "semantic-ui-react";
 import _ from 'lodash';
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
@@ -416,7 +416,9 @@ const PartyForm = () => {
                         <option value='9'>Grass ONLY</option>
                     </select>
                 </SemanticForm.Field>
+                <Segment>
 
+                </Segment>
                 {/* Submit Button */}
                 <button type="submit">Submit</button>
             </SemanticForm>
