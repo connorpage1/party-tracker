@@ -61,7 +61,9 @@ class Party(db.Model, SerializerMixin):
             'customer': {
                 'id': self.customer.id,
                 'first_name': self.customer.first_name,
-                'last_name': self.customer.last_name
+                'last_name': self.customer.last_name,
+                'email': self.customer.email,
+                'phone': self.customer.phone
             },
             'party_packages': [
                 {

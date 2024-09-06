@@ -12,5 +12,5 @@ instance
 package-lock.json
 
 
-__pycache__sendgrid.env
+__pycache__
 sendgrid.env

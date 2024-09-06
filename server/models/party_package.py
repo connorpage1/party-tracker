@@ -27,9 +27,9 @@ class PartyPackage(db.Model, SerializerMixin):
     
     @property
     def price_per_head(self):
-        if self.package.per_head and self.over_package_time:
-            return  self.over_package_time * self.price_at_purchase
-        elif self.package.per_head:
+        if self.package.per_head:
+            if self.over_package_time:
+                return self.price_at_purchase * (1 + self.over_package_time)  
             return self.price_at_purchase
         return 0
     
@@ -37,6 +37,7 @@ class PartyPackage(db.Model, SerializerMixin):
     def total_price(self):
         if self.price_per_head:
             return self.price_per_head * self.party.guest_number
+        
         return self.price_at_purchase
     
 @event.listens_for(PartyPackage, 'before_insert')

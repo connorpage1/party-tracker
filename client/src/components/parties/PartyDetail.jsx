@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { Segment } from "semantic-ui-react";
+import { Segment, Button } from "semantic-ui-react";
 import { DateTime } from "luxon";
 
 function getCookie(name) {
@@ -94,15 +94,18 @@ const PartyDetail = () => {
                 <p className="party-detail-body">{location}</p>
                 <Segment className="customer-info">
                     <h3 className="party-detail-header">Customer Name:</h3>
-                <p className="party-detail-body">{guest_number}</p>
+                <p className="party-detail-body">{customer.first_name} {customer.last_name}</p>
                     <h3 className="party-detail-header">Contact Email:</h3>
-                <p className="party-detail-body">{guest_number}</p>
+                <p className="party-detail-body">{customer.email}</p>
                     <h3 className="party-detail-header">Contact Phone Number:</h3>
-                <p className="party-detail-body">{guest_number}</p>
+                <p className="party-detail-body">{customer.phone}</p>
                 </Segment>
                 <h3 className="party-detail-header">Total Price:</h3>
                 <p className="party-detail-body">${total}</p>
+
+                <Button>Edit</Button><Button>Delete</Button>
             </div>
+
         )
     }
     else {
