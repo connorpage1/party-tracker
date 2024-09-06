@@ -40,7 +40,7 @@ def send_email():
             sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
             sg.send(message)
         except Exception as e:
-            print(e.message)
+            print(e.message or str(e))
             
 
 if __name__ == '__main__':
