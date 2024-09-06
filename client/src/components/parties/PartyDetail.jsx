@@ -36,6 +36,7 @@ const PartyDetail = () => {
         const { party_packages, organization, theme, date_and_start_time, end_time, guest_number, status, location, customer, contract } = party
         const date = DateTime.fromSQL(date_and_start_time)
         const end = DateTime.fromSQL(end_time)
+        let total = 0
         return(
             <div className="party-details">
                 {
@@ -66,16 +67,20 @@ const PartyDetail = () => {
                     <p className="party-detail-body">{end.toLocaleString(DateTime.TIME_SIMPLE)}</p>
                 </Segment>
                 {party_packages.length !== 0 ? party_packages.map((party_package) => {
+
+                    total += party_package.total_price
+                    const over = party_package.over_package_time
+                    const pricePerHead = party_package.price_per_head
                     return (
                         <Segment className='package-segment' key={party_package.id}>
-                            <h3 className="party-detail-header">Packages:</h3>
+                            <h3 className="party-detail-header">Package:</h3>
                             <p>{party_package.package.name}</p>
-                            <h3 className="party-detail-header">Per Head?:</h3>
-                            <p>{party_package.package.per_head ? 'Yes' : 'No'}</p>
-                            <h3 className="party-detail-header">Price:</h3>
-                            <p>{party_package.package.per_head ? 
-                                `$${party_package.price_at_purchase * guest_number}` :
-                                `$${party_package.price_at_purchase}`}</p>
+                            <h3 className="party-detail-header">Per Head Price:</h3>
+                            <p>{party_package.package.per_head ? `$${pricePerHead}/head`: 'N/A'}</p>
+                            
+                            <h3 className="party-detail-header">Package Price:</h3>
+                            <p>${party_package.total_price}</p>
+                            
                             <h3 className="party-detail-header">Description:</h3>
                             <p>{party_package.description}</p>
                         </Segment>)}) : <p>No packages to display'</p>}
@@ -96,7 +101,7 @@ const PartyDetail = () => {
                 <p className="party-detail-body">{guest_number}</p>
                 </Segment>
                 <h3 className="party-detail-header">Total Price:</h3>
-                <p className="party-detail-body">{guest_number}</p>
+                <p className="party-detail-body">${total}</p>
             </div>
         )
     }

@@ -19,6 +19,26 @@ class PartyPackage(db.Model, SerializerMixin):
     
     serialize_rules = ('-party.party_packages', '-package.party_packages')
 
+    @property
+    def over_package_time(self):
+        if self.party.duration > self.package.ph_rate_time_hours:
+            return self.party.duration - self.package.ph_rate_time_hours
+        return 0
+    
+    @property
+    def price_per_head(self):
+        if self.package.per_head and self.over_package_time:
+            return  self.over_package_time * self.price_at_purchase
+        elif self.package.per_head:
+            return self.price_at_purchase
+        return 0
+    
+    @property
+    def total_price(self):
+        if self.price_per_head:
+            return self.price_per_head * self.party.guest_number
+        return self.price_at_purchase
+    
 @event.listens_for(PartyPackage, 'before_insert')
 def set_price_at_purchase(mapper, connection, target):
     # Ensure package is loaded and price_at_purchase is set
@@ -28,3 +48,4 @@ def set_price_at_purchase(mapper, connection, target):
             target.price_at_purchase = package.price
         else:
             raise ValueError(f"Package with id {target.package_id} not found.")
+        

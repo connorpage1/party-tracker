@@ -8,11 +8,12 @@ from models.party import Party
 from models.package import Package
 from models.party_package import PartyPackage
 
-from config import app, db, api, jwt
+from config import app, db, api, jwt, mail
 from routes.party_routes import Parties, PartiesById
 from routes.customer_routes import Customers, CustomerById
 from routes.authentication import Login, Logout, Me
 from routes.package_routes import Packages
+
 
 from flask_jwt_extended import (
     create_access_token,
@@ -24,7 +25,7 @@ from flask_jwt_extended import (
     jwt_required
     
 )
-
+from flask_mail import Message
 
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 DATABASE = os.environ.get("DB_URI", f"sqlite:///{os.path.join(BASE_DIR, 'app.db')}")

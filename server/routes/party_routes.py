@@ -62,7 +62,6 @@ class PartiesById(Resource):
                 for pp in party.party_packages:
                     print(pp.package)
                 party_dict = party.to_dict_custom()
-                print(party_dict)
                 return make_response(party_dict, 200)
             return make_response({'error': f'No party found with id {id}'}, 404)
         except Exception as e:

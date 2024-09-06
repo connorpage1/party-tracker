@@ -90,3 +90,11 @@ button:focus-visible {
   background-color: red;
   cursor: pointer;
 }
+
+/* .customer-segment {
+  width: 60%;
+} */
+.party-form {
+  align-content: center;
+  width: 40em;
+}

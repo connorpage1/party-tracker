@@ -1,15 +1,16 @@
 import * as yup from "yup";
 import { useFormik } from "formik";
 import { useState } from "react";
-import { Header, Segment, Form as SemanticForm } from "semantic-ui-react";
+import { Header, Segment, Form as SemanticForm, Label, Grid } from "semantic-ui-react";
 import _ from 'lodash';
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import PhoneInput from 'react-phone-number-input'
 
 const schema = yup.object().shape({
     date: yup.date("Please enter the date in the proper format").required("Please enter a date"),
     start_time: yup.string().required("Please enter a time"),
-    duration: yup.string().required("Please enter a duration"),
+    duration: yup.number("Please enter a valid number").required("Please enter a duration"),
     theme: yup.string(),
     status: yup.string(),
     organization: yup.string(),
@@ -20,6 +21,23 @@ const schema = yup.object().shape({
     customer_last_name: yup.string(),
     customer_phone_number: yup.string()
 });
+
+const initialValues = {
+    date: '',
+    start_time: '',
+    duration: '',
+    theme: '',
+    status: '',
+    organization: '',
+    guest_number:'',
+    location: '',
+    customer_email: '',
+    customer_first_name: '',
+    customer_last_name: '',
+    customer_phone_number: ''
+
+
+}
 
 function getCookie(name) {
     const value = `; ${document.cookie}`;
@@ -72,7 +90,7 @@ const PartyForm = () => {
             });
             
             if (!response.ok) {
-                throw new Error("Failed to submit form");
+                throw response.json();
             }
             
             console.log("Form submitted successfully");
@@ -112,12 +130,7 @@ const PartyForm = () => {
     };
     
     const formik = useFormik({
-        initialValues: {
-            customer_first_name: '',
-            customer_last_name: '',
-            customer_phone_number: '',
-            customer_email: ''
-        },
+        initialValues: {initialValues},
         validationSchema: schema,
         onSubmit: handleFormSubmit
     });
@@ -151,8 +164,8 @@ const PartyForm = () => {
 
     return (
         <div className="party-form">
-            <SemanticForm onSubmit={formik.handleSubmit}>
-                <Segment>
+            <SemanticForm className="party-form" onSubmit={formik.handleSubmit}>
+                <Segment className="customer-segment">
                     <Header as="h3">Customer Information</Header>
 
                     <SemanticForm.Field>
@@ -169,6 +182,8 @@ const PartyForm = () => {
                                 debouncedSearch(email);
                                 setIsCustomerSelected(false);
                             }}
+                            onBlur={formik.handleBlur}
+
                         />
                     {/* Custom autocomplete suggestion list */}
                     {dropdownOpen && searchResults.length > 0 && (
@@ -204,8 +219,16 @@ const PartyForm = () => {
                             value={formik.values.customer_first_name}
                             autoComplete="off"
                             onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
                             disabled={isCustomerSelected}  // Disable if customer is selected
                         />
+                        {formik.touched.customer_first_name && 
+                        formik.errors.customer_first_name && 
+                        <div className='error'>
+                            <Label color='red basic' className='form-label' pointing>
+                                {formik.errors.customer_first_name}
+                            </Label>
+                        </div>}
                     </SemanticForm.Field>
                     {/* Customer Last Name Field */}
                     <SemanticForm.Field>
@@ -217,8 +240,16 @@ const PartyForm = () => {
                             value={formik.values.customer_last_name}
                             autoComplete="off"
                             onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
                             disabled={isCustomerSelected}  // Disable if customer is selected
                         />
+                        {formik.touched.customer_last_name && 
+                        formik.errors.customer_last_name && 
+                        <div className='error'>
+                            <Label color='red basic' className='form-label' pointing>
+                                {formik.errors.customer_last_name}
+                            </Label>
+                        </div>}
                     </SemanticForm.Field>
 
                     {/* Customer Phone Number Field */}
@@ -231,8 +262,16 @@ const PartyForm = () => {
                             value={formik.values.customer_phone_number}
                             autoComplete="off"
                             onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
                             disabled={isCustomerSelected}  // Disable if customer is selected
                         />
+                        {formik.touched.customer_phone_number && 
+                        formik.errors.customer_phone_number && 
+                        <div className='error'>
+                            <Label color='red basic' className='form-label' pointing>
+                                {formik.errors.customer_phone_number}
+                            </Label>
+                        </div>}
                     </SemanticForm.Field>
                 </Segment>
                 
@@ -245,7 +284,16 @@ const PartyForm = () => {
                         placeholder="Enter party date"
                         value={formik.values.date}
                         onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+
                     />
+                    {formik.touched.date && 
+                    formik.errors.date && 
+                    <div className='error'>
+                        <Label color='red basic' className='form-label' pointing>
+                            {formik.errors.date}
+                        </Label>
+                    </div>}
                 </SemanticForm.Field>
 
                 {/* Start Time Field */}
@@ -257,22 +305,38 @@ const PartyForm = () => {
                         placeholder="Enter start time"
                         value={formik.values.start_time}
                         onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
                         step='900'
                     />
+                    {formik.touched.start_time && 
+                    formik.errors.start_time && 
+                    <div className='error'>
+                        <Label color='red basic' className='form-label' pointing>
+                            {formik.errors.start_time}
+                        </Label>
+                    </div>}
             
                 </SemanticForm.Field>
 
-                {/* End Time Field */}
+                {/* Duration Field */}
                 <SemanticForm.Field>
                     <label htmlFor="duration">Duration (hours)</label>
                     <input
                         name="duration"
                         type="number"
-                        placeholder="Enter duration"
+                        placeholder="Enter duration (e.g. 2.5 hours)"
                         value={formik.values.duration}
                         onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
                         step='0.25'
                     />
+                    {formik.touched.duration && 
+                    formik.errors.duration && 
+                    <div className='error'>
+                        <Label color='red basic' className='form-label' pointing>
+                            {formik.errors.duration}
+                        </Label>
+                    </div>}
                 </SemanticForm.Field>
 
                 {/* Theme Field */}
@@ -284,6 +348,7 @@ const PartyForm = () => {
                         placeholder="Enter party theme (optional)"
                         value={formik.values.theme}
                         onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
                     />
                     
                 </SemanticForm.Field>
@@ -297,6 +362,7 @@ const PartyForm = () => {
                         placeholder="Enter party status"
                         value={formik.values.status}
                         onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
                     />
                     
                 </SemanticForm.Field>
@@ -310,6 +376,7 @@ const PartyForm = () => {
                         placeholder="Enter organization (optional)"
                         value={formik.values.organization}
                         onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
                     />
                 </SemanticForm.Field>
 
@@ -322,19 +389,32 @@ const PartyForm = () => {
                         placeholder="Enter number of guests"
                         value={formik.values.guest_number}
                         onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
                     />
                 </SemanticForm.Field>
 
                 {/* Location Field */}
                 <SemanticForm.Field>
                     <label htmlFor="location">Location</label>
-                    <input
+                    <select
                         name="location"
                         type="text"
-                        placeholder="Enter party location"
+                        placeholder="Select a party location"
                         value={formik.values.location}
                         onChange={formik.handleChange}
-                    />
+                        onBlur={formik.handleBlur}
+                    >
+                        <option value=''>Select One</option>
+                        <option value='1'>Little House ONLY (no grass)</option>
+                        <option value='2'>Little House and Grass</option>
+                        <option value='3'>Full Warehouse</option>
+                        <option value='4'>Partial Warehouse</option>
+                        <option value='5'>Full Buyout</option>
+                        <option value='6'>Terrace</option>
+                        <option value='7'>Oak Tree</option>
+                        <option value='8'>Oak Tree and Terrace</option>
+                        <option value='9'>Grass ONLY</option>
+                    </select>
                 </SemanticForm.Field>
 
                 {/* Submit Button */}
