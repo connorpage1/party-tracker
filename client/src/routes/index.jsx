@@ -5,6 +5,7 @@ import Landing from "../components/Landing";
 import PartyTable from "../components/parties/PartyTable";
 import PartyForm from "../components/forms/PartyForm";
 import PartyDetail from "../components/parties/PartyDetail";
+import PackageCreationForm from "../components/forms/PackageCreationForm";
 
 export const router = createBrowserRouter([
   {
@@ -30,6 +31,10 @@ export const router = createBrowserRouter([
         {
           path: '/parties/:id',
           element: <PartyDetail />
+        },
+        {
+          path:'/packages/new',
+          element: <PackageCreationForm />
         }
 
     ]

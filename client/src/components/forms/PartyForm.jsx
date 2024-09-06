@@ -4,14 +4,14 @@ import PhoneInput from 'react-phone-number-input';
 import * as yup from "yup";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { useState } from "react";
-import { Header, Segment, Form as SemanticForm, Label, Message, Dropdown } from "semantic-ui-react";
+import { Header, Segment, Form as SemanticForm, Label, Message, Dropdown, Button} from "semantic-ui-react";
 import _ from 'lodash';
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
 const locationOptions = [
-    { key: '1', text: 'Little House ONLY (no grass)', value: '1' },
-    { key: '2', text: 'Little House and Grass', value: '2' },
+    { key: '1', text: 'Little House and Grass', value: '1' },
+    { key: '2', text: 'Little House ONLY (no grass)', value: '2' },
     { key: '3', text: 'Full Warehouse', value: '3' },
     { key: '4', text: 'Partial Warehouse', value: '4' },
     { key: '5', text: 'Full Buyout', value: '5' },
@@ -336,9 +336,9 @@ const PartyForm = () => {
                                     fluid
                                     selection
                                     options={statusOptions}
-                                    value={field.value}
+                                    value={form.values.status || ''}
                                     onChange={(e, { value }) => form.setFieldValue(field.name, value)}
-                                    onBlur={field.onBlur}
+                                    onBlur={() => form.setFieldTouched('status', true)}
                                     name={field.name}
                                 />
                             )}
@@ -370,9 +370,9 @@ const PartyForm = () => {
                                     fluid
                                     selection
                                     options={locationOptions}
-                                    value={field.value}
+                                    value={form.values.location || ''}
                                     onChange={(e, { value }) => form.setFieldValue(field.name, value)} 
-                                    onBlur={field.onBlur} 
+                                    onBlur={() => form.setFieldTouched('location', true)}
                                     name={field.name}
                                 />
                             )}
@@ -381,7 +381,9 @@ const PartyForm = () => {
                     </SemanticForm.Field>
 
                     {/* Submit Button */}
-                    <button type="submit">Submit</button>
+                    <Button type="submit" fluid primary loading={isSubmitting} disabled={isSubmitting}>
+                        Submit Party
+                    </Button>
                 </Form>
                 
                 )}
