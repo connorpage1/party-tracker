@@ -1,14 +1,17 @@
-from random import choice as rc
+import sys
+sys.path.append("..")
+
+from random import randint, choice as rc
 
 from faker import Faker
 
-from config import app, db
-from models.party import Party
-from models.customer import Customer
-from models.package import Package
-from models.party_package import PartyPackage
-from models.user import User
-from models.contract import Contract
+from server.config import app, db
+from server.models.party import Party
+from server.models.customer import Customer
+from server.models.package import Package
+from server.models.party_package import PartyPackage
+from server.models.user import User
+from server.models.contract import Contract
 
 from datetime import datetime, timedelta
 
@@ -63,14 +66,14 @@ def seed_data():
             theme = fake.word()
             start = fake.date_time_between(start_date='now', end_date='+1y')
             duration = rc([1, 1.5, 2, 2.5, 3, 3.5])
-            status = rc(["tentative", 'pending', 'confirmed'])
+            status = randint(1, 9)
             org = fake.word()
             customer = rc([customer.id for customer in customers])
             user = rc([user.id for user in users])
-            guests = 100
-            location = rc(['Little House', 'Full Warehouse', 'Partial Warehouse', 'Full Buyout', 'Terrace'])
+            guests = randint(50, 250)
+            location = randint (1, 8)
             
-            party = Party(theme=theme, date_and_start_time=start, duration=duration, status=status, organization=org, customer_id=customer, user_id=user, guest_number=guests, location=location)
+            party = Party(theme=theme, date_and_start_time=start, duration=duration, status_id=status, organization=org, customer_id=customer, user_id=user, guest_number=guests, location_id=location)
             
             db.session.add(party)
             parties.append(party)
@@ -79,7 +82,7 @@ def seed_data():
         
         packages = []
         package_1 = Package(name="Full Tchoup", type_id=2, price=38, per_head=1)
-        package_2 = Package(name="Taco Bar", type_id=1, price=380, per_head=0)
+        package_2 = Package(name="Taco Bar", type_id=1, price=500, per_head=0)
         
         packages.append(package_1) 
         packages.append(package_2) 
@@ -103,7 +106,7 @@ def seed_data():
         
         contracts = []
         for party in parties:
-            terms = fake.sentence()
+            terms = fake.paragraph()
             date = rc([fake.date_this_month(), None])
             if date:
                 status='signed'

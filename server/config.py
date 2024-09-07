@@ -9,7 +9,6 @@ from flask_session import Session
 from flask_jwt_extended import JWTManager
 from os import environ
 from datetime import timedelta
-from flask_mail import Mail
 
 
 app = Flask(__name__)
@@ -27,8 +26,8 @@ metadata = MetaData(naming_convention={
     "pk": "pk_%(table_name)s"
 })
 db = SQLAlchemy(metadata=metadata)
-migrate = Migrate(app, db)
 db.init_app(app)
+migrate = Migrate(app, db)
 
 # flask_jwt_extended configuration
 jwt = JWTManager(app)
@@ -49,14 +48,14 @@ api = Api(app, prefix='/api/v1')
 flask_bcrypt = Bcrypt(app)
 
 # Flask mail configuration
-app.config['MAIL_SERVER']= 'smtp.sendgrid.net'
-app.config['MAIL_PORT'] = 465
-app.config['MAIL_USERNAME'] = 'apikey'
-app.config['MAIL_PASSWORD'] = environ.get('SENDGRID_PW')
-app.config['MAIL_USE_TLS'] = False
-app.config['MAIL_USE_SSL'] = True
-app.config['MAIL_DEFAULT_SENDER'] = 'roundup@tchoupparties.com'
+# app.config['MAIL_SERVER']= 'smtp.sendgrid.net'
+# app.config['MAIL_PORT'] = 465
+# app.config['MAIL_USERNAME'] = 'apikey'
+# app.config['MAIL_PASSWORD'] = environ.get('SENDGRID_PW')
+# app.config['MAIL_USE_TLS'] = False
+# app.config['MAIL_USE_SSL'] = True
+# app.config['MAIL_DEFAULT_SENDER'] = 'roundup@tchoupparties.com'
 
 
-mail = Mail(app)
+# mail = Mail(app)
 

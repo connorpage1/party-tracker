@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: ebdb42764eec
+Revision ID: 8d178fa830a1
 Revises: 
-Create Date: 2024-09-05 13:56:29.469032
+Create Date: 2024-09-06 19:55:31.554255
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'ebdb42764eec'
+revision = '8d178fa830a1'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -58,12 +58,12 @@ def upgrade():
     sa.Column('theme', sa.String(), nullable=True),
     sa.Column('date_and_start_time', sa.DateTime(), nullable=False),
     sa.Column('duration', sa.Float(), nullable=False),
-    sa.Column('status', sa.String(), nullable=False),
+    sa.Column('status_id', sa.Integer(), nullable=False),
     sa.Column('organization', sa.String(), nullable=True),
-    sa.Column('guest_number', sa.Integer(), nullable=True),
+    sa.Column('guest_number', sa.Integer(), nullable=False),
     sa.Column('customer_id', sa.Integer(), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=False),
-    sa.Column('location', sa.String(), nullable=False),
+    sa.Column('location_id', sa.Integer(), nullable=False),
     sa.Column('discount', sa.Float(), nullable=True),
     sa.Column('created_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=True),
     sa.Column('updated_at', sa.DateTime(), nullable=True),

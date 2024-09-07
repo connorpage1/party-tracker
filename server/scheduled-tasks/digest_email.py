@@ -1,10 +1,13 @@
 import sys
 import os
 
+# from dotenv import load_dotenv
+# load_dotenv('/Users/connor/Development/code/phase-5/party-tracker/sendgrid.env')
+
 # Add the server folder to the system path
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + '/../')
 
-from models.party import Party
+from server.models.party import Party
 
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail

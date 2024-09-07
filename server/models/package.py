@@ -1,7 +1,10 @@
-from models.__init__ import SerializerMixin, validates, db, association_proxy
+from server.models import SerializerMixin, validates, db, association_proxy
 
 class Package(db.Model, SerializerMixin):
     __tablename__ = 'packages'
+    
+    __table_args__ = {'extend_existing': True}
+
     
     TYPE_FOOD = 1
     TYPE_BAR_PACKAGE = 2
@@ -25,7 +28,7 @@ class Package(db.Model, SerializerMixin):
     serialize_rules = ('-party_packages.package', '-party_packages.party')
     @property
     def package_type(self):
-        """Converts role_id to role name."""
+        """Converts type_id to type name."""
         if self.type_id == self.TYPE_FOOD:
             return "food"
         elif self.type_id == self.TYPE_BAR_PACKAGE:
@@ -41,7 +44,7 @@ class Package(db.Model, SerializerMixin):
 
     @package_type.setter
     def package_type(self, type_name):
-        """Sets role_id based on the role name."""
+        """Sets type_id based on the type name."""
         if type_name == "food":
             self.type_id = self.TYPE_FOOD
         elif type_name == "bar package":

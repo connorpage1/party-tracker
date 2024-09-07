@@ -1,4 +1,4 @@
-from models.__init__ import db, SerializerMixin, validates, flask_bcrypt, hybrid_property, re
+from server.models import db, SerializerMixin, validates, flask_bcrypt, hybrid_property, re
 
 class User(db.Model, SerializerMixin):
     __tablename__ = 'users'

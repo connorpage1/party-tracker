@@ -16,10 +16,10 @@ from flask_jwt_extended import (
 )
 
 # Local imports
-from models.contract import Contract
-from models.customer import Customer
-from models.user import User
-from models.party import Party
-from models.package import Package
-from models.party_package import PartyPackage
-from config import db
+from server.models.contract import Contract
+from server.models.customer import Customer
+from server.models.user import User
+from server.models.party import Party
+from server.models.package import Package
+from server.models.party_package import PartyPackage
+from server.config import db

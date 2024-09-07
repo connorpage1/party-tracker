@@ -5,4 +5,4 @@ from sqlalchemy.orm import validates
 from sqlalchemy.ext.hybrid import hybrid_property
 from datetime import datetime
 import re
-from config import db, flask_bcrypt
+from server.config import db, flask_bcrypt
