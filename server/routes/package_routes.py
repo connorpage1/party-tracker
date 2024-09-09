@@ -1,4 +1,4 @@
-from routes.__init__ import Package, Resource, request, make_response, db, jwt_required
+from server.routes.__init__ import Package, Resource, request, make_response, db, jwt_required
 
 class Packages(Resource):
     @jwt_required

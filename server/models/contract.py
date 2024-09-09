@@ -1,4 +1,4 @@
-from models.__init__ import SerializerMixin, validates, db, re
+from server.models import SerializerMixin, validates, db, re
 
 class Contract(db.Model, SerializerMixin):
     __tablename__ = 'contracts'

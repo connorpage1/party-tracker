@@ -1,5 +1,5 @@
-from models.__init__ import SerializerMixin, validates, db
-from models.package import Package
+from server.models import SerializerMixin, validates, db
+from server.models.package import Package
 from sqlalchemy import event
 
 class PartyPackage(db.Model, SerializerMixin):

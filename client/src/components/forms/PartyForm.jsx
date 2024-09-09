@@ -52,10 +52,10 @@ const initialValues = {
     start_time: '',
     duration: '',
     theme: '',
-    status: '',
+    status_id: '',
     organization: '',
     guest_number:'',
-    location: '',
+    location_id: '',
     customer_email: '',
     customer_first_name: '',
     customer_last_name: '',
@@ -105,10 +105,10 @@ const PartyForm = () => {
                     date_and_start_time: `${data.date} ${data.start_time}`,
                     duration: data.duration,
                     theme: data.theme,
-                    status: data.status,
+                    status_id: data.status_id,
                     organization: data.organization,
                     guest_number: data.guest_number,
-                    location: data.location,
+                    location_id: data.location_id,
                     customer_id: custId,
                     user_id: 1
                     
@@ -328,8 +328,8 @@ const PartyForm = () => {
 
                     {/* Status Field */}
                     <SemanticForm.Field>
-                        <label htmlFor="status">Status</label>
-                        <Field name="status">
+                        <label htmlFor="status_id">Status</label>
+                        <Field name="status_id">
                             {({ field, form }) => (
                                 <Dropdown
                                     placeholder="Select Status"
@@ -338,7 +338,7 @@ const PartyForm = () => {
                                     options={statusOptions}
                                     value={form.values.status || ''}
                                     onChange={(e, { value }) => form.setFieldValue(field.name, value)}
-                                    onBlur={() => form.setFieldTouched('status', true)}
+                                    onBlur={() => form.setFieldTouched('status_id', true)}
                                     name={field.name}
                                 />
                             )}
@@ -362,8 +362,8 @@ const PartyForm = () => {
                     {/* Location Field */}
                     
                     <SemanticForm.Field>
-                        <label htmlFor="location">Location</label>
-                        <Field name="location">
+                        <label htmlFor="location_id">Location</label>
+                        <Field name="location_id">
                             {({ field, form }) => (
                                 <Dropdown
                                     placeholder="Select a party location"
@@ -372,12 +372,12 @@ const PartyForm = () => {
                                     options={locationOptions}
                                     value={form.values.location || ''}
                                     onChange={(e, { value }) => form.setFieldValue(field.name, value)} 
-                                    onBlur={() => form.setFieldTouched('location', true)}
+                                    onBlur={() => form.setFieldTouched('location_id', true)}
                                     name={field.name}
                                 />
                             )}
                         </Field>
-                        <ErrorMessage name="location" component={Message} negative />
+                        <ErrorMessage name="location_id" component={Message} negative />
                     </SemanticForm.Field>
 
                     {/* Submit Button */}

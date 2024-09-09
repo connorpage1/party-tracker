@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Segment, Button } from "semantic-ui-react";
 import { DateTime } from "luxon";
+import DeletePartyModal from "./DeletePartyModal";
 
 function getCookie(name) {
     const value = `; ${document.cookie}`;
@@ -103,7 +104,7 @@ const PartyDetail = () => {
                 <h3 className="party-detail-header">Total Price:</h3>
                 <p className="party-detail-body">${total}</p>
 
-                <Button>Edit</Button><Button>Delete</Button>
+                <Button>Edit</Button><DeletePartyModal id={id}>Delete</DeletePartyModal>
             </div>
 
         )

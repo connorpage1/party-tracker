@@ -1,4 +1,4 @@
-from routes.__init__ import (
+from server.routes.__init__ import (
     Resource,
     User,
     make_response,

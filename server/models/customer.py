@@ -1,4 +1,4 @@
-from models.__init__ import SerializerMixin, validates, db, re
+from server.models import SerializerMixin, validates, db, re
 
 class Customer(db.Model, SerializerMixin):
     __tablename__ = 'customers'
@@ -12,7 +12,7 @@ class Customer(db.Model, SerializerMixin):
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
     
-    parties = db.relationship("Party", back_populates='customer')
+    parties = db.relationship("Party", back_populates='customer', cascade='all, delete-orphan')
     
     serialize_rules = ('-parties.customer',)
 

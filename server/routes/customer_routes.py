@@ -1,4 +1,4 @@
-from routes.__init__ import Customer, Resource, make_response, datetime, request, jwt_required, db
+from server.routes.__init__ import Customer, Resource, make_response, datetime, request, jwt_required, db
 
 class Customers(Resource):
     @jwt_required()
