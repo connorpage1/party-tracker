@@ -48,7 +48,7 @@ class Logout(Resource):
             #! Add token invalidation
             return response
         except Exception as e:
-            return make_response({"error": str(e)})
+            return make_response({"error": str(e)}, 400)
         
 class Me(Resource):
     @jwt_required()

@@ -1,6 +1,6 @@
 import * as yup from "yup";
 import { Formik, Field, Form, ErrorMessage } from "formik";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigate, useOutletContext, Link } from "react-router-dom";
 import {
     Button,
@@ -13,6 +13,7 @@ import {
     Icon,
 } from "semantic-ui-react";
 import toast from "react-hot-toast";
+import { GlobalContext } from "../../context/GlobalProvider";
 
 const schema = yup.object().shape({
     username_or_email: yup.string().required("Please enter your username or email"),
@@ -21,6 +22,7 @@ const schema = yup.object().shape({
 
 const LoginForm = () => {
     const [showPassword, setShowPassword] = useState(false);
+    const { updateUser } = useContext(GlobalContext)
     const navigate = useNavigate()
 
     const togglePasswordVisibility = () => {
@@ -41,7 +43,7 @@ const LoginForm = () => {
                         .json()
                         .then((userObj) => {
                             //updateUser(userObj);
-                            console.log(userObj);
+                            updateUser(userObj);
                             navigate('/')
                         })
                 } else {

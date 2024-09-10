@@ -1,6 +1,6 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState} from 'react';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
-import { Button, Segment, Header, Message, Form as SemanticForm, Dropdown, Checkbox } from 'semantic-ui-react';
+import { Button, Segment, Header, Message, Form as SemanticForm, Dropdown, Checkbox, Popup, Icon } from 'semantic-ui-react';
 import * as yup from 'yup';
 import { GlobalContext } from '../../context/GlobalProvider';
 
@@ -15,6 +15,7 @@ const packageTypeOptions = [
 
 const PackageCreationForm = () => {
     const { JWTHeader } = useContext(GlobalContext)
+    const [perHeadSelected, setPerHeadSelected] = useState(false)
 
     // Validation schema using Yup
     const validationSchema = yup.object().shape({
@@ -96,7 +97,10 @@ const PackageCreationForm = () => {
                                         toggle
                                         label="Charge per head?"
                                         checked={field.value}
-                                        onChange={(e, data) => setFieldValue('per_head', data.checked)}
+                                        onChange={(e, data) => {
+                                            setFieldValue('per_head', data.checked)
+                                            setPerHeadSelected((current) => !current)
+                                        }}
                                     />
                                 )}
                             />
@@ -105,6 +109,13 @@ const PackageCreationForm = () => {
                         {/* Package Price */}
                         <SemanticForm.Field>
                             <label htmlFor="price">Price</label>
+                            <Popup 
+                                    content='If using a per head rate, simply put the 
+                                    price per head for the standard package. Final price 
+                                    will be computed by the system and discounts can be 
+                                    applied to individual parties.'
+                                    trigger={<Icon name='question circle' />}
+                                    />
                             <Field
                                 name="price"
                                 type="number"
@@ -116,18 +127,29 @@ const PackageCreationForm = () => {
                         </SemanticForm.Field>
 
                         {/* Rate Time in Hours */}
-                        <SemanticForm.Field>
-                            <label htmlFor="ph_rate_time_hours">Rate Time (in hours)</label>
-                            <Field
-                                name="ph_rate_time_hours"
-                                type="number"
-                                placeholder="Enter per head rate time in hours (default is 2)"
-                                as={SemanticForm.Input}
-                                fluid
-                                min="0"
-                            />
-                            <ErrorMessage name="ph_rate_time_hours" component={Message} negative />
-                        </SemanticForm.Field>
+                        {perHeadSelected ? 
+                        <div className='rate-time'>
+                            <SemanticForm.Field>
+                                <label htmlFor="ph_rate_time_hours">Rate Time (in hours)</label>
+                                <Popup 
+                                    content='If using a per head rate, rate 
+                                    time is the default amount of time for 
+                                    that standard package. The default is 2 hours,
+                                    and overage time will be computed automatically 
+                                    when you apply a standard package to a party.'
+                                    trigger={<Icon name='question circle' />}
+                                    />
+                                <Field
+                                    name="ph_rate_time_hours"
+                                    type="number"
+                                    placeholder="Enter per head rate time in hours (default is 2)"
+                                    as={SemanticForm.Input}
+                                    fluid
+                                    min="0"
+                                />
+                                <ErrorMessage name="ph_rate_time_hours" component={Message} negative />
+                            </SemanticForm.Field>
+                        </div> : <></>}
 
                         {/* Submit Button */}
                         <Button type="submit" primary fluid loading={isSubmitting} disabled={isSubmitting}>

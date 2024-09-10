@@ -98,3 +98,7 @@ button:focus-visible {
   align-content: center;
   width: 40em;
 }
+.header-logout {
+  margin-left: auto;
+  float: right;
+}

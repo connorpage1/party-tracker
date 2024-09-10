@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { Image, Button} from "semantic-ui-react";
 import { GlobalContext } from "../context/GlobalProvider";
 import { useNavigate } from "react-router-dom";
+import Navbar from "./Navbar";
 
 const Header = () => {
     const { user, JWTHeader, updateUser} = useContext(GlobalContext)
@@ -34,8 +35,11 @@ const Header = () => {
         <div className="header">
             <Image src='/tchoup-black.png' size='tiny' />
             <h2>Party Tracker</h2>
-            <p>Hello, {user.name}</p>
-            <Button onClick={logout}>Logout</Button>
+            <div className="header-logout">
+                <p>Hello, {user.name}</p>
+                <Button size='mini' onClick={logout}>Logout</Button>
+            </div>
+            <Navbar />
         </div>
     );
 }
