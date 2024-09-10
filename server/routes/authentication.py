@@ -51,9 +51,6 @@ class Logout(Resource):
             return make_response({"error": str(e)})
         
 class Me(Resource):
-    #! Why isn't JWT required here, like is was in the class example?
-    #! When using Postman, get TypeError: Object of type function is not JSON serializable
-    #! if JWT required decorator is here
     @jwt_required()
     def get(self):
         try:

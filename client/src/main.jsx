@@ -5,5 +5,11 @@ import 'semantic-ui-css/semantic.min.css'
 import { Toaster } from 'react-hot-toast'
 import { RouterProvider } from "react-router-dom";
 import { router } from './routes/index.jsx'
+import GlobalProvider from './context/GlobalProvider.jsx'
 
-createRoot(document.getElementById('root')).render(<RouterProvider router={router} />)
+
+createRoot(document.getElementById('root')).render(
+    <GlobalProvider>
+        <RouterProvider router={router} />
+    </GlobalProvider>
+)

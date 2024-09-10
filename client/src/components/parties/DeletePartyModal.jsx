@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigate, useOutletContext } from "react-router-dom";
 import {
     Modal,
@@ -8,14 +8,13 @@ import {
     ModalActions,
     ModalContent,
 } from "semantic-ui-react";
+import { GlobalContext } from "../../context/GlobalProvider";
 
-function getCookie(name) {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return parts.pop().split(';').shift();
-}
 
 const DeletePartyModal = ({ id }) => {
+    const { JWTHeader } = useContext(GlobalContext)
+
+
     const navigate = useNavigate();
     const [open, setOpen] = useState(false)
 
@@ -24,7 +23,7 @@ const DeletePartyModal = ({ id }) => {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
-                "X-CSRF-TOKEN": getCookie("csrf_access_token")
+                ...JWTHeader
             }
         }).then(res => {
             if (res.ok) {

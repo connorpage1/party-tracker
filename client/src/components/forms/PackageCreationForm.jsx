@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import { Button, Segment, Header, Message, Form as SemanticForm, Dropdown, Checkbox } from 'semantic-ui-react';
 import * as yup from 'yup';
+import { GlobalContext } from '../../context/GlobalProvider';
 
 // Package type options based on your model's types
 const packageTypeOptions = [
@@ -11,13 +12,10 @@ const packageTypeOptions = [
     { key: 4, text: 'Room Fee', value: 4 },
     { key: 5, text: 'Cleaning Fee', value: 5 },
 ];
-function getCookie(name) {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return parts.pop().split(';').shift();
-}
 
 const PackageCreationForm = () => {
+    const { JWTHeader } = useContext(GlobalContext)
+
     // Validation schema using Yup
     const validationSchema = yup.object().shape({
         name: yup.string().required('Package name is required'),
@@ -32,7 +30,7 @@ const PackageCreationForm = () => {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                "X-CSRF-TOKEN": getCookie("csrf_access_token")
+                ...JWTHeader
             },
             body: JSON.stringify(values),
         });

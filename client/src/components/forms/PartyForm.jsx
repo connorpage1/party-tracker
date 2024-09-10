@@ -3,11 +3,12 @@ import PhoneInput from 'react-phone-number-input';
 
 import * as yup from "yup";
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Header, Segment, Form as SemanticForm, Label, Message, Dropdown, Button} from "semantic-ui-react";
 import _ from 'lodash';
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { GlobalContext } from '../../context/GlobalProvider';
 
 const locationOptions = [
     { key: '1', text: 'Little House and Grass', value: '1' },
@@ -63,16 +64,11 @@ const initialValues = {
     selectedPackages: [],
     discount: '',
     packageDescriptions: {}
-
-
 }
 
-function getCookie(name) {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return parts.pop().split(';').shift();
-}
 const PartyForm = () => {
+    const { JWTHeader } = useContext(GlobalContext)
+
     const [searchResults, setSearchResults] = useState([]);
     const [customerId, setCustomerId] = useState(null);
     const [isCustomerSelected, setIsCustomerSelected] = useState(false);
@@ -85,7 +81,7 @@ const PartyForm = () => {
     useEffect(()=> {
         fetch('/api/v1/packages', {
             method: 'GET',
-            headers: {"X-CSRF-TOKEN": getCookie("csrf_access_token")}
+            headers: {...JWTHeader}
         })
         .then(res => {
             if (res.ok) {
@@ -131,7 +127,7 @@ const PartyForm = () => {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "X-CSRF-TOKEN": getCookie("csrf_access_token")
+                    ...JWTHeader
                 },
                 body: JSON.stringify({
                     date_and_start_time: `${data.date} ${data.start_time}`,
@@ -168,7 +164,7 @@ const PartyForm = () => {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "X-CSRF-TOKEN": getCookie("csrf_access_token")
+                    ...JWTHeader
                 },
                 body: JSON.stringify({
                     first_name: data.customer_first_name,
@@ -212,7 +208,7 @@ const PartyForm = () => {
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json",
-                    "X-CSRF-TOKEN": getCookie("csrf_access_token")
+                    ...JWTHeader
                 },
                 body: JSON.stringify(partyPackage)
             })

@@ -44,7 +44,7 @@ api.add_resource(Customers, '/customers')
 api.add_resource(CustomerById, '/customers/<int:id>')
 api.add_resource(Login, '/login')
 api.add_resource(Packages, '/packages')
-api.add_resource(Logout, '/signout')
+api.add_resource(Logout, '/logout')
 api.add_resource(Me, '/me')
 api.add_resource(PartyPackages, '/party-packages')
 

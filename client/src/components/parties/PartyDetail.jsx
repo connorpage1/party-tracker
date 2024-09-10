@@ -1,16 +1,15 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router-dom";
 import { Segment, Button } from "semantic-ui-react";
 import { DateTime } from "luxon";
 import DeletePartyModal from "./DeletePartyModal";
+import EditPartyModal from "./EditPartyModal";
+import { GlobalContext } from "../../context/GlobalProvider";
 
-function getCookie(name) {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return parts.pop().split(';').shift();
-}
 
 const PartyDetail = () => {
+    const { JWTHeader } = useContext(GlobalContext)
+
     const [party, setParty] = useState({})
     const { id } = useParams()
 
@@ -18,7 +17,7 @@ const PartyDetail = () => {
         fetch(`/api/v1/parties/${id}`, {
             method: 'GET',
             headers: {
-                "X-CSRF-TOKEN": getCookie("csrf_access_token")
+                ...JWTHeader
             }
         })
         .then(res => {
@@ -104,7 +103,7 @@ const PartyDetail = () => {
                 <h3 className="party-detail-header">Total Price:</h3>
                 <p className="party-detail-body">${total}</p>
 
-                <Button>Edit</Button><DeletePartyModal id={id}>Delete</DeletePartyModal>
+                <EditPartyModal party={party}>Edit</EditPartyModal><DeletePartyModal id={id}>Delete</DeletePartyModal>
             </div>
 
         )

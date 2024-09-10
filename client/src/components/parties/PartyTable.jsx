@@ -7,12 +7,15 @@ import {
     Icon,
     Table,
   } from 'semantic-ui-react'
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { useNavigate } from 'react-router-dom'
 import { DateTime } from "luxon";
+import { GlobalContext } from '../../context/GlobalProvider';
 
 
 const PartyTable = () => {
+    const { JWTHeader } = useContext(GlobalContext)
+
     const navigate = useNavigate()
     const [parties, setParties] = useState([])
     // const [futureDisplay, setFutureDisplay] = useState(true)
@@ -33,7 +36,12 @@ const PartyTable = () => {
     const url = `/api/v1/parties`
     
     useEffect(()=> {
-        fetch(url)
+        fetch(url, {
+            method: 'GET',
+            headers: {
+                ...JWTHeader
+            }
+        })
         .then(res => {
             const data = res.json()
             if (res.ok) {
