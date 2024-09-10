@@ -40,7 +40,7 @@ class Login(Resource):
 
 
 class Logout(Resource):
-    @jwt_required
+    @jwt_required()
     def delete(self):
         try:
             response = make_response({}, 204)
@@ -54,6 +54,7 @@ class Me(Resource):
     #! Why isn't JWT required here, like is was in the class example?
     #! When using Postman, get TypeError: Object of type function is not JSON serializable
     #! if JWT required decorator is here
+    @jwt_required()
     def get(self):
         try:
             verify_jwt_in_request()

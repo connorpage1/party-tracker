@@ -1,11 +1,12 @@
 from server.routes.__init__ import Package, Resource, request, make_response, db, jwt_required
 
 class Packages(Resource):
-    @jwt_required
+    @jwt_required()
     def get(self):
         try:
             packages = db.session.execute(db.select(Package)).scalars().all()
-            return make_response([package.to_dict() for package in packages], 200)
+            response = [package.to_dict() for package in packages]
+            return make_response(response, 200)
         except Exception as e:
             return make_response({'error': str(e)}, 400)
         

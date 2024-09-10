@@ -39,12 +39,13 @@ class Parties(Resource):
                 theme=data.get('theme'),
                 date_and_start_time=date_and_start_time, 
                 duration=data.get('duration'),
-                status=data.get('status'),
+                status_id=data.get('status_id'),
                 organization=data.get('organization'),
                 customer_id=data.get('customer_id'),
                 guest_number=data.get('guest_number'),
-                location=data.get('location'),
-                user_id=data.get('user_id')
+                location_id=data.get('location_id'),
+                user_id=data.get('user_id'),
+                discount=data.get('discount')
                 )
             db.session.add(new_party)
             db.session.commit()

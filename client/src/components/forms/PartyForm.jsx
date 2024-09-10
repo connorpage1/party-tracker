@@ -3,7 +3,7 @@ import PhoneInput from 'react-phone-number-input';
 
 import * as yup from "yup";
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Header, Segment, Form as SemanticForm, Label, Message, Dropdown, Button} from "semantic-ui-react";
 import _ from 'lodash';
 import toast from "react-hot-toast";
@@ -37,10 +37,10 @@ const validationSchema = yup.object().shape({
     start_time: yup.string().required("Please enter a time"),
     duration: yup.number("Please enter a valid number").required("Please enter a duration"),
     theme: yup.string(),
-    status: yup.string(),
+    status_id: yup.number().required(),
     organization: yup.string(),
     guest_number: yup.number().min(1, "Guest number must be at least 1").required("Estimated guest number is required"),
-    location: yup.string().required("Please enter a location"),
+    location_id: yup.string().required("Please enter a location"),
     customer_email: yup.string().email("Invalid email format").required("Please enter an email"),
     customer_first_name: yup.string(),
     customer_last_name: yup.string(),
@@ -59,7 +59,10 @@ const initialValues = {
     customer_email: '',
     customer_first_name: '',
     customer_last_name: '',
-    customer_phone_number: ''
+    customer_phone_number: '',
+    selectedPackages: [],
+    discount: '',
+    packageDescriptions: {}
 
 
 }
@@ -74,7 +77,32 @@ const PartyForm = () => {
     const [customerId, setCustomerId] = useState(null);
     const [isCustomerSelected, setIsCustomerSelected] = useState(false);
     const [dropdownOpen, setDropdownOpen] = useState(false)
+    const [packages, setPackages] = useState([])
+    const [selectedPackages, setSelectedPackages] = useState([])
     const navigate = useNavigate()
+
+
+    useEffect(()=> {
+        fetch('/api/v1/packages', {
+            method: 'GET',
+            headers: {"X-CSRF-TOKEN": getCookie("csrf_access_token")}
+        })
+        .then(res => {
+            if (res.ok) {
+                res.json()
+                .then(setPackages)
+            } else {
+                const error = res.json()
+                throw error
+            }
+        }).catch(console.log)
+    }, [])
+
+    const packageOptions = packages.map(newPackage => ({
+        key: newPackage.id,
+        value: newPackage.id,
+        text: newPackage.name
+    }));
 
     const handleFormSubmit = async (values, { resetForm }) => {
         try {
@@ -105,12 +133,13 @@ const PartyForm = () => {
                     date_and_start_time: `${data.date} ${data.start_time}`,
                     duration: data.duration,
                     theme: data.theme,
-                    status_id: data.status_id,
+                    status_id: Number(data.status_id),
                     organization: data.organization,
                     guest_number: data.guest_number,
-                    location_id: data.location_id,
+                    location_id: Number(data.location_id),
                     customer_id: custId,
-                    user_id: 1
+                    user_id: 1,
+                    discount: data.discount
                     
                 }),
             });
@@ -180,6 +209,10 @@ const PartyForm = () => {
         } catch (error) {
             console.error('Error fetching customers:', error);
         }
+    };
+
+    const handlePackageChange = (e, { value }) => {
+        setSelectedPackages(value);  // Update the selected packages
     };
 
 
@@ -336,7 +369,7 @@ const PartyForm = () => {
                                     fluid
                                     selection
                                     options={statusOptions}
-                                    value={form.values.status || ''}
+                                    value={form.values.status_id || ''}
                                     onChange={(e, { value }) => form.setFieldValue(field.name, value)}
                                     onBlur={() => form.setFieldTouched('status_id', true)}
                                     name={field.name}
@@ -348,7 +381,7 @@ const PartyForm = () => {
 
                     {/* Organization Field */}
                     <SemanticForm.Field>
-                        <label htmlFor="organization">Organization</label>
+                        <label  htmlFor="organization">Organization</label>
                         <Field name="organization" type="text" as={SemanticForm.Input} fluid />
                         <ErrorMessage name="organization" component={Message} negative />
                     </SemanticForm.Field>
@@ -370,7 +403,7 @@ const PartyForm = () => {
                                     fluid
                                     selection
                                     options={locationOptions}
-                                    value={form.values.location || ''}
+                                    value={form.values.location_id || ''}
                                     onChange={(e, { value }) => form.setFieldValue(field.name, value)} 
                                     onBlur={() => form.setFieldTouched('location_id', true)}
                                     name={field.name}
@@ -379,6 +412,39 @@ const PartyForm = () => {
                         </Field>
                         <ErrorMessage name="location_id" component={Message} negative />
                     </SemanticForm.Field>
+
+                    <SemanticForm.Field>
+                    <label htmlFor='selectedPackages'>Select Packages</label>
+                        <Dropdown
+                            className="ui fluid search dropdown"
+                            placeholder="Select Packages"
+                            fluid
+                            search
+                            multiple
+                            selection
+                            options={packageOptions}
+                            onChange={(e, { value }) => {
+                                handlePackageChange(e, { value })
+                                setFieldValue('selectedPackages', value)}}
+                        />
+                    </SemanticForm.Field>
+                    {selectedPackages.map((pkg) => (
+                        <div key={pkg.id} className='field'>
+                            <label htmlFor='description'>
+                                Additional notes for package: {packageOptions.find(option => option.value === pkg)?.text}
+                            </label>
+                            <Field 
+                                name={`packageDescriptions.${pkg.text}`}
+                                placeholder="Enter additional notes"
+                                as='textarea'
+                                />
+                        </div>
+                    ))}
+                    <SemanticForm.Field>
+                        <label htmlFor='discount'>Discount</label>
+                        <Field name='discount' type='number' as={SemanticForm.Input} fluid />
+                    </SemanticForm.Field>
+
 
                     {/* Submit Button */}
                     <Button type="submit" fluid primary loading={isSubmitting} disabled={isSubmitting}>
