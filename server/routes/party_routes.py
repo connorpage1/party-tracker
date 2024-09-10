@@ -79,7 +79,7 @@ class PartiesById(Resource):
                             value = datetime.fromisoformat(value)
                         setattr(party, attr, value)    
                 db.session.commit()
-                return make_response(party.to_dict(), 200)
+                return make_response(party.to_dict_custom(), 200)
             return make_response({'error': f'No party found with id {id}'}, 404)
         except Exception as e:
             db.session.rollback()

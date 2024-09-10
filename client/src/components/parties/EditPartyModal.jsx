@@ -1,9 +1,10 @@
 import * as yup from "yup";
 import { DateTime } from "luxon";
-import { ErrorMessage, Field, Form, Formik } from "formik";
+import { ErrorMessage, Field, Form as FormikForm, Formik } from "formik";
 import { useContext, useState } from "react"
-import { Button, Message, Modal, Form as SemanticForm, Label, Dropdown} from "semantic-ui-react";
+import { Button, Message, Modal, Form as SemanticForm, Label, Dropdown } from "semantic-ui-react";
 import { GlobalContext } from "../../context/GlobalProvider";
+import { useParams } from "react-router-dom";
 
 const locationOptions = [
     { key: '1', text: 'Little House and Grass', value: '1' },
@@ -43,8 +44,9 @@ const validationSchema = yup.object().shape({
 
 
 
-const EditPartyModal = ({ party }) => {
+const EditPartyModal = ({ party, updateParty }) => {
     const { JWTHeader } = useContext(GlobalContext)
+    const { id } = useParams()
 
     const [open, setOpen] = useState(false)
     const date_and_start = DateTime.fromSQL(party.date_and_start_time)
@@ -61,13 +63,50 @@ const EditPartyModal = ({ party }) => {
         location_id: `${party.location_id}`,
         discount: Number(party.discount)
     }
-    const handleFormSubmit = (values) => {
-        fetch()
+    const handleFormSubmit = (values, setSubmitting) => {
+        console.log("Form is submitting", values)
+        fetch(`/api/v1/parties/${id}`, {
+            method: "PATCH",
+            headers: {
+                'Content-Type': 'application/json',
+                ...JWTHeader
+            },
+            body: JSON.stringify({
+                'date_and_start_time': `${values.date} ${values.start_time}`,
+                'duration': values.duration,
+                'theme': values.theme,
+                'status_id': values.status_id,
+                'organization': values.organization,
+                'guest_number': values.guest_number,
+                'location_id': values.location_id,
+                'discount': values.discount
+            })
+        })
+            .then(res => {
+                if (res.ok) {
+                    return res.json()
+                        .then((data) => 
+                            updateParty(data), setOpen(false)
+                            )
+                } else if (res.status === 401) {
+                    // Login message error handling here
+                    console.log("Please log in")
+                    setSubmitting(false)
+                } else {
+                    return res.json().then(error => {
+                        setSubmitting(false)
+                        throw error
+                    })
+                }
+            }).catch(err => {
+                console.log(err)
+                setSubmitting(false)
+            })
     }
 
     return (
         <div>
-            <Button onClick={()=> setOpen(true)} primary>
+            <Button onClick={() => setOpen(true)} primary>
                 Edit Party
             </Button>
             <Modal
@@ -80,30 +119,28 @@ const EditPartyModal = ({ party }) => {
             >
                 <Modal.Header>Edit Party</Modal.Header>
                 <Modal.Content>
-                    <Formik 
+                    <Formik
                         initialValues={initialValues}
-                        validationSchema={validationSchema}
-                        onSubmit={async (values, actions) => {
-                            await handleFormSubmit(values, actions)
-                            setOpen(false)
-                        }}
+                        // validationSchema={validationSchema}
+                        onSubmit={(values, { setSubmitting }) => {
+                            console.log("Formik is submitting", values)
+                            handleFormSubmit(values, setSubmitting)}}
                     >
                         {({ isSubmitting }) => (
-
-                            <Form>
+                            <FormikForm>
                                 <SemanticForm.Field>
                                     <label htmlFor="date">Date</label>
                                     <Field name='date' type='date' as={SemanticForm.Input} fluid />
                                     <ErrorMessage name="date" component={Message} negative />
                                 </SemanticForm.Field>
-                            
+
                                 <SemanticForm.Field>
                                     <label htmlFor="start_time">Start Time</label>
-                                    <Field 
-                                        name="start_time" 
-                                        type="time" 
-                                        as={SemanticForm.Input} 
-                                        fluid 
+                                    <Field
+                                        name="start_time"
+                                        type="time"
+                                        as={SemanticForm.Input}
+                                        fluid
                                         step="900"
                                     />
                                     <ErrorMessage name="start_time" component={Message} negative />
@@ -145,7 +182,7 @@ const EditPartyModal = ({ party }) => {
 
                                 {/* Organization Field */}
                                 <SemanticForm.Field>
-                                    <label  htmlFor="organization">Organization</label>
+                                    <label htmlFor="organization">Organization</label>
                                     <Field name="organization" type="text" as={SemanticForm.Input} fluid />
                                     <ErrorMessage name="organization" component={Message} negative />
                                 </SemanticForm.Field>
@@ -163,14 +200,14 @@ const EditPartyModal = ({ party }) => {
                                     <Field name="location_id">
                                         {({ field, form }) => (
                                             <Dropdown
-                                            placeholder="Select a party location"
-                                            fluid
-                                            selection
-                                            options={locationOptions}
-                                            value={form.values.location_id}
-                                            onChange={(e, { value }) => form.setFieldValue(field.name, value)} 
-                                            onBlur={() => form.setFieldTouched('location_id', true)}
-                                            name={field.name}
+                                                placeholder="Select a party location"
+                                                fluid
+                                                selection
+                                                options={locationOptions}
+                                                value={form.values.location_id}
+                                                onChange={(e, { value }) => form.setFieldValue(field.name, value)}
+                                                onBlur={() => form.setFieldTouched('location_id', true)}
+                                                name={field.name}
                                             />
                                         )}
                                     </Field>
@@ -184,18 +221,18 @@ const EditPartyModal = ({ party }) => {
                                 <Button type='submit' fluid primary loading={isSubmitting} disabled={isSubmitting}>
                                     Save Changes
                                 </Button>
-                            </Form>
-                            
+                            </FormikForm>
+
                         )
-                        }    
-                        </Formik>
+                        }
+                    </Formik>
                 </Modal.Content>
                 <Modal.Actions>
                     <Button color="black" onClick={() => setOpen(false)}>
                         Cancel
                     </Button>
                 </Modal.Actions>
-                </Modal>
+            </Modal>
         </div>
     )
 }

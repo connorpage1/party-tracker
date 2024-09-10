@@ -21,6 +21,7 @@ const schema = yup.object().shape({
 
 const LoginForm = () => {
     const [showPassword, setShowPassword] = useState(false);
+    const navigate = useNavigate()
 
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
@@ -41,6 +42,7 @@ const LoginForm = () => {
                         .then((userObj) => {
                             //updateUser(userObj);
                             console.log(userObj);
+                            navigate('/')
                         })
                 } else {
                     res.json().then((error) => {

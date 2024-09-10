@@ -54,7 +54,41 @@ class Me(Resource):
     @jwt_required()
     def get(self):
         try:
-            verify_jwt_in_request()
+            # verify_jwt_in_request()
             return make_response(current_user.to_dict(), 200)
         except Exception as e:
             return make_response({"error": str(e)}, 400)
+
+
+class Profile(Resource):
+    """ More information than the 'me' route for 
+    viewing profile and changing password
+    once logged in """
+    @jwt_required()
+    def get(self):
+        try:
+            # verify_jwt_in_request()
+            return make_response(current_user.to_dict(
+                rules=("email", "role", "created_at",
+                        "updated_at", "parties")), 200)
+        except Exception as e:
+            return make_response({"error": str(e)}, 400)
+    
+    @jwt_required()
+    def patch(self): 
+        try:
+            # verify_jwt_in_request()
+            user = current_user
+            data = request.json()
+            if "pwupdate" in request.args and not user.authenticate(
+                data.get("current_password")
+            ):
+                return make_response({'error': 'Incorrect password'}, 401)
+            for attr, value in data.items():
+                setattr(user, attr, value)
+            db.session.commit()
+            return make_response(user.to_dict(), 200)
+            
+        except Exception as e:
+            db.session.rollback()
+            make_response({'error': str(e)}, 400) 

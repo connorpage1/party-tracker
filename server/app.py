@@ -10,7 +10,7 @@ from server.models.party_package import PartyPackage
 from server.config import app, db, api, jwt
 from server.routes.party_routes import Parties, PartiesById
 from server.routes.customer_routes import Customers, CustomerById
-from server.routes.authentication import Login, Logout, Me
+from server.routes.authentication import Login, Logout, Me, Profile
 from server.routes.package_routes import Packages
 from server.routes.party_package_routes import PartyPackages
 
@@ -47,7 +47,7 @@ api.add_resource(Packages, '/packages')
 api.add_resource(Logout, '/logout')
 api.add_resource(Me, '/me')
 api.add_resource(PartyPackages, '/party-packages')
-
+api.add_resource(Profile, '/profile')
 
 if __name__ == "__main__":
-    app.run(port=5555, debug=True)
+    app.run(port=5555, debug=False)

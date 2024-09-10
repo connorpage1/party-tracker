@@ -55,7 +55,7 @@ class User(db.Model, SerializerMixin):
         if self.role_id == self.ROLE_ADMIN:
             return "admin"
         elif self.role_id == self.ROLE_MANAGER:
-            return "seller"
+            return "manager"
         else:
             return "unknown"
 

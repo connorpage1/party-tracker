@@ -6,6 +6,7 @@ import PartyTable from "../components/parties/PartyTable";
 import PartyForm from "../components/forms/PartyForm";
 import PartyDetail from "../components/parties/PartyDetail";
 import PackageCreationForm from "../components/forms/PackageCreationForm";
+import UserProfile from "../components/user/UserProfile";
 
 export const router = createBrowserRouter([
   {
@@ -35,6 +36,10 @@ export const router = createBrowserRouter([
         {
           path:'/packages/new',
           element: <PackageCreationForm />
+        },
+        {
+          path: '/profile',
+          element: <UserProfile />
         }
 
     ]

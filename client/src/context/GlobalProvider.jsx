@@ -30,8 +30,12 @@ const GlobalProvider = ({ children }) => {
             }
         }).catch(console.log)
     }, [])
+
+    const updateUser = (value) => {
+        setUser(value)
+    }
     return (
-        <GlobalContext.Provider value={{JWTHeader, user}}>
+        <GlobalContext.Provider value={{JWTHeader, user, updateUser}}>
             {children}
         </GlobalContext.Provider>
     )

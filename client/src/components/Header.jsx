@@ -4,7 +4,7 @@ import { GlobalContext } from "../context/GlobalProvider";
 import { useNavigate } from "react-router-dom";
 
 const Header = () => {
-    const { user, JWTHeader } = useContext(GlobalContext)
+    const { user, JWTHeader, updateUser} = useContext(GlobalContext)
     const navigate = useNavigate()
 
     const logout = () => {
@@ -15,6 +15,7 @@ const Header = () => {
             }
         }).then(res => {
             if (res.ok) {
+                updateUser(null)
                 navigate('/')
             }
         })

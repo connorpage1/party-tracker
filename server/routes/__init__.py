@@ -15,6 +15,7 @@ from flask_jwt_extended import (
     
 )
 
+
 # Local imports
 from server.models.contract import Contract
 from server.models.customer import Customer
@@ -23,3 +24,4 @@ from server.models.party import Party
 from server.models.package import Package
 from server.models.party_package import PartyPackage
 from server.config import db
+from server.emails.new_account_email import new_account_email

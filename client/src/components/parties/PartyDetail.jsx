@@ -11,6 +11,10 @@ const PartyDetail = () => {
     const { JWTHeader } = useContext(GlobalContext)
 
     const [party, setParty] = useState({})
+
+    const updateParty = (updatedParty) => {
+        setParty(updatedParty)
+    }
     const { id } = useParams()
 
     useEffect(() => {
@@ -103,7 +107,7 @@ const PartyDetail = () => {
                 <h3 className="party-detail-header">Total Price:</h3>
                 <p className="party-detail-body">${total}</p>
 
-                <EditPartyModal party={party}>Edit</EditPartyModal><DeletePartyModal id={id}>Delete</DeletePartyModal>
+                <EditPartyModal party={party} updateParty={updateParty}>Edit</EditPartyModal><DeletePartyModal id={id}>Delete</DeletePartyModal>
             </div>
 
         )

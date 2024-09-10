@@ -47,15 +47,3 @@ api = Api(app, prefix='/api/v1')
 # flask-bcrypt configuration
 flask_bcrypt = Bcrypt(app)
 
-# Flask mail configuration
-# app.config['MAIL_SERVER']= 'smtp.sendgrid.net'
-# app.config['MAIL_PORT'] = 465
-# app.config['MAIL_USERNAME'] = 'apikey'
-# app.config['MAIL_PASSWORD'] = environ.get('SENDGRID_PW')
-# app.config['MAIL_USE_TLS'] = False
-# app.config['MAIL_USE_SSL'] = True
-# app.config['MAIL_DEFAULT_SENDER'] = 'roundup@tchoupparties.com'
-
-
-# mail = Mail(app)
-
