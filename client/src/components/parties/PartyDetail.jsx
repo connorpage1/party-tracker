@@ -37,10 +37,9 @@ const PartyDetail = () => {
     }, [])
 
     if (Object.keys(party).length !== 0){
-        const { party_packages, organization, theme, date_and_start_time, end_time, guest_number, status, location, customer, contract } = party
+        const { party_packages, organization, theme, date_and_start_time, end_time, guest_number, status, location, customer, contract, discount, totals } = party
         const date = DateTime.fromSQL(date_and_start_time)
         const end = DateTime.fromSQL(end_time)
-        let total = 0
         return(
             <div className="party-details">
                 {
@@ -60,6 +59,14 @@ const PartyDetail = () => {
                         </div>:
                         <></> 
                     }
+                        
+                    <h3 className="party-detail-header">Guest Number:</h3>
+                    <p className="party-detail-body">{guest_number}</p>
+                    <h3 className="party-detail-header">Status:</h3>
+                    <p className="party-detail-body">{status}</p>
+                    <h3 className="party-detail-header">Location:</h3>
+                    <p className="party-detail-body">{location}</p>
+                    
                 <Segment>
                     <h3 className="party-detail-header">Day:</h3>
                     <p className="party-detail-body">{date.toFormat('cccc')}</p>
@@ -71,8 +78,6 @@ const PartyDetail = () => {
                     <p className="party-detail-body">{end.toLocaleString(DateTime.TIME_SIMPLE)}</p>
                 </Segment>
                 {party_packages.length !== 0 ? party_packages.map((party_package) => {
-
-                    total += party_package.total_price
                     const over = party_package.over_package_time
                     const pricePerHead = party_package.price_per_head
                     return (
@@ -82,6 +87,17 @@ const PartyDetail = () => {
                             <h3 className="party-detail-header">Per Head Price:</h3>
                             <p>{party_package.package.per_head ? `$${pricePerHead}/head`: 'N/A'}</p>
                             
+                            { party_package.bar_tip_amount || party_package.food_tip_amount ?
+                            <div>
+
+                                <h3 className="party-detail-header">Subtotal:</h3>
+                                <p>${party_package.subtotal_price}</p>
+
+                                <h3 className="party-detail-header">Tip:</h3>
+                                <p>${party_package.bar_tip_amount || party_package.food_tip_amount}</p>
+
+                            </div>
+                            : <></>}
                             <h3 className="party-detail-header">Package Price:</h3>
                             <p>${party_package.total_price}</p>
                             
@@ -89,13 +105,6 @@ const PartyDetail = () => {
                             <p>{party_package.description}</p>
                         </Segment>)}) : <p>No packages to display'</p>}
 
-                    
-                <h3 className="party-detail-header">Guest Number:</h3>
-                <p className="party-detail-body">{guest_number}</p>
-                <h3 className="party-detail-header">Status:</h3>
-                <p className="party-detail-body">{status}</p>
-                <h3 className="party-detail-header">Location:</h3>
-                <p className="party-detail-body">{location}</p>
                 <Segment className="customer-info">
                     <h3 className="party-detail-header">Customer Name:</h3>
                 <p className="party-detail-body">{customer.first_name} {customer.last_name}</p>
@@ -104,8 +113,17 @@ const PartyDetail = () => {
                     <h3 className="party-detail-header">Contact Phone Number:</h3>
                 <p className="party-detail-body">{customer.phone}</p>
                 </Segment>
+                {discount ?
+                <div className="discount-section">
+                    <h3 className="party-detail-header">Discount</h3>
+                    <p className="party-detail-body">{discount}</p> 
+                </div>  : <></>}
+                <h3 className="party-detail-header">Kitchen Tip:</h3>
+                <p className="party-detail-body">${totals.food_tip}</p>
+                <h3 className="party-detail-header">Bar Tip:</h3>
+                <p className="party-detail-body">${totals.bar_tip}</p>
                 <h3 className="party-detail-header">Total Price:</h3>
-                <p className="party-detail-body">${total}</p>
+                <p className="party-detail-body">${(totals.total-discount)}</p>
 
                 <EditPartyModal party={party} updateParty={updateParty}>Edit</EditPartyModal><DeletePartyModal id={id}>Delete</DeletePartyModal>
             </div>

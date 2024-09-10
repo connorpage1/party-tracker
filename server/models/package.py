@@ -27,6 +27,14 @@ class Package(db.Model, SerializerMixin):
 
     serialize_rules = ('-party_packages.package', '-party_packages.party')
     @property
+    def bar_tip(self):
+        return (self.type_id == self.TYPE_BAR_PACKAGE or self.TYPE_BAR_MIN_SPEND)
+    
+    @property
+    def food_tip(self):
+        return(self.type_id == self.TYPE_FOOD)
+    
+    @property
     def package_type(self):
         """Converts type_id to type name."""
         if self.type_id == self.TYPE_FOOD:

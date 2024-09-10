@@ -106,7 +106,24 @@ class Party(db.Model, SerializerMixin):
             return 'Needs Follow-Up'
         elif self.status_id == self.COMPLETED:
             return 'Completed'
-
+    @property
+    def totals(self):
+        food_tip = 0
+        bar_tip = 0
+        subtotal =0
+        total = 0
+        for party_package in self.party_packages:
+            food_tip += party_package.food_tip_amount
+            bar_tip += party_package.bar_tip_amount
+            subtotal += party_package.subtotal_price
+            total += party_package.total_price
+        return {
+                'food_tip': food_tip,
+                'bar_tip': bar_tip,
+                'subtotal': subtotal,
+                'total': total
+                    
+                }
     def to_dict_custom(self):
         return {
             'id': self.id,
@@ -121,6 +138,7 @@ class Party(db.Model, SerializerMixin):
             'location': self.location,
             'location_id': self.location_id,
             'discount': self.discount,
+            'totals': self.totals,
             'customer': {
                 'id': self.customer.id,
                 'first_name': self.customer.first_name,
@@ -135,6 +153,9 @@ class Party(db.Model, SerializerMixin):
                     'price_at_purchase': pp.price_at_purchase,
                     'over_package_time': pp.over_package_time,
                     'price_per_head': pp.price_per_head,
+                    'subtotal_price': pp.subtotal_price,
+                    'food_tip_amount': pp.food_tip_amount,
+                    'bar_tip_amount': pp.bar_tip_amount,
                     'total_price': pp.total_price,
                     'package': pp.package.to_dict(rules=('-party_packages',))
                 } for pp in self.party_packages

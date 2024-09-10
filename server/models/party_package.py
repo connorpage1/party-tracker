@@ -34,11 +34,27 @@ class PartyPackage(db.Model, SerializerMixin):
         return 0
     
     @property
-    def total_price(self):
+    def subtotal_price(self):
         if self.price_per_head:
             return self.price_per_head * self.party.guest_number
         
         return self.price_at_purchase
+    
+    @property
+    def food_tip_amount(self):
+        return self.subtotal_price * 0.2 if self.package.food_tip else 0
+    
+    @property
+    def bar_tip_amount(self):
+        return self.subtotal_price * 0.2 if self.package.bar_tip else 0
+    
+    @property
+    def total_price(self):
+        if self.food_tip_amount:
+            return self.subtotal_price + self.food_tip_amount
+        elif self.bar_tip_amount:
+            return self.subtotal_price + self.bar_tip_amount
+        return self.subtotal_price
     
 @event.listens_for(PartyPackage, 'before_insert')
 def set_price_at_purchase(mapper, connection, target):
