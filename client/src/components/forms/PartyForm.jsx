@@ -37,7 +37,7 @@ const validationSchema = yup.object().shape({
     start_time: yup.string().required("Please enter a time"),
     duration: yup.number("Please enter a valid number").required("Please enter a duration"),
     theme: yup.string(),
-    status_id: yup.number().required(),
+    status_id: yup.number().required('Please select a status'),
     organization: yup.string(),
     guest_number: yup.number().min(1, "Guest number must be at least 1").required("Estimated guest number is required"),
     location_id: yup.string().required("Please enter a location"),
@@ -101,17 +101,21 @@ const PartyForm = () => {
     const packageOptions = packages.map(newPackage => ({
         key: newPackage.id,
         value: newPackage.id,
-        text: newPackage.name
+        text: newPackage.name,
+        price: newPackage.price
     }));
 
     const handleFormSubmit = async (values, { resetForm }) => {
         try {
             if (customerId) {
-                await postParty(values, customerId); // Customer already exists, directly create the party
-            } else {
+                const party = await postParty(values, customerId); // Customer already exists, directly create the party
+                await postPartyPackages(makePartyPackagesForPost(values, party.id))
+                }
+            else {
                 const customer = await postCustomer(values); // Wait for customer creation
                 if (customer && customer.id) {
-                    await postParty(values, customer.id); // Use the newly created customer ID for the party
+                    const party = await postParty(values, customer.id); // Use the newly created customer ID for the party
+                    await postPartyPackages(makePartyPackagesForPost(values, party.id))
                 }
             }
             resetForm();
@@ -143,12 +147,14 @@ const PartyForm = () => {
                     
                 }),
             });
-            
+            const party = response.json()
             if (!response.ok) {
                 throw response.json();
             }
-            
-            console.log("Form submitted successfully");
+            else {
+                console.log("Party created successfully");
+                return party
+            }
         } catch (error) {
             console.error("Error submitting form:", error);
             throw error;
@@ -184,6 +190,51 @@ const PartyForm = () => {
         }
     };
     
+
+
+    const makePartyPackagesForPost = (formValues, partyId) => {
+        return formValues.selectedPackages.map((selectPackage) => {
+            const pkg = packageOptions.find(option => option.value === selectPackage)
+            return ({
+                package_id: pkg.value,
+                party_id: partyId,
+                price_at_purchase: pkg.price,
+                description: formValues.packageDescriptions[pkg.value],
+                })
+            })
+        }
+            
+        
+
+    const postSinglePartyPackage = async(partyPackage) => {
+        try {
+            const response = await fetch('/api/v1/party-packages', {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": getCookie("csrf_access_token")
+                },
+                body: JSON.stringify(partyPackage)
+            })
+            const data = await response.json();
+            if (response.ok) {
+                console.log("Package posted successfully", data)
+            } else {
+                throw (data.error || data.msg || "Error posting package")
+            }
+
+        } catch(error) {
+            console.error(error)
+            throw error
+        }
+    }
+
+    const postPartyPackages = async (packagesWithDescriptions) => {
+        for (const partyPackage of packagesWithDescriptions) {
+            await postSinglePartyPackage(partyPackage)
+        }
+    }
+
     const debouncedSearch = _.debounce((email) => {
         if (email.length > 0) {
             searchCustomers(email, setSearchResults, setDropdownOpen);
@@ -192,7 +243,7 @@ const PartyForm = () => {
             setSearchResults([]);
             setDropdownOpen(false)
         }
-    }, 500);
+    }, 400);
 
     const searchCustomers = async (email, setSearchResults, setDropdownOpen) => {
         try {
@@ -225,7 +276,7 @@ const PartyForm = () => {
                 initialValues={initialValues}
                 validationSchema={validationSchema}
                 onSubmit={handleFormSubmit}>
-                {({ isSubmitting, values, setFieldValue, handleChange, handleBlur }) => (
+                {({ isSubmitting, setFieldValue }) => (
                     <Form className="ui form">
 
                     <Segment className="customer-segment">
@@ -424,17 +475,18 @@ const PartyForm = () => {
                             selection
                             options={packageOptions}
                             onChange={(e, { value }) => {
+                                console.log(value)
                                 handlePackageChange(e, { value })
                                 setFieldValue('selectedPackages', value)}}
                         />
                     </SemanticForm.Field>
                     {selectedPackages.map((pkg) => (
-                        <div key={pkg.id} className='field'>
+                        <div key={pkg} className='field'>
                             <label htmlFor='description'>
                                 Additional notes for package: {packageOptions.find(option => option.value === pkg)?.text}
                             </label>
                             <Field 
-                                name={`packageDescriptions.${pkg.text}`}
+                                name={`packageDescriptions.${pkg}`}
                                 placeholder="Enter additional notes"
                                 as='textarea'
                                 />
