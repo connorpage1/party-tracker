@@ -22,6 +22,23 @@ class Users(Resource):
             role = current_user.role
             if role != 'admin':
                 return make_response({'error': "Insufficient privileges"}, 403)
+            
+            email = request.args.get('email')
+            username = request.args.get('username')
+            
+            if email:
+                stmt = db.select(User).where(User.email.ilike(email))
+                if db.session.execute(stmt).scalars().first():
+                    return make_response({'error': 'Email already in use'}, 400)
+                else:
+                    return make_response({'message': 'valid username'}, 204)
+            if username:
+                stmt = db.select(User).where(User.username.ilike(username))
+                if db.session.execute(stmt).scalars().first():
+                    return make_response({'error': 'Username already in use'}, 400)
+                else:   
+                    return make_response({'message': 'valid username'}, 204)
+
             users = db.session.execute(db.select(User)).scalars().all()
             response = [user.to_dict() for user in users]
             

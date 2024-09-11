@@ -5,6 +5,8 @@ import { DateTime } from "luxon";
 import DeletePartyModal from "./DeletePartyModal";
 import EditPartyModal from "./EditPartyModal";
 import { GlobalContext } from "../../context/GlobalProvider";
+import responseParser from "../error-handling/response_parser";
+import toast from "react-hot-toast";
 
 
 const PartyDetail = () => {
@@ -30,10 +32,9 @@ const PartyDetail = () => {
                 .then(setParty)
             }
             else {
-                error = res.json()
-                throw new Error(error)
+                throw responseParser(res)
             }
-        }).catch(console.log)
+        }).catch(error => toast.error(error.error))
     }, [])
 
     if (Object.keys(party).length !== 0){
@@ -66,7 +67,7 @@ const PartyDetail = () => {
                     <p className="party-detail-body">{status}</p>
                     <h3 className="party-detail-header">Location:</h3>
                     <p className="party-detail-body">{location}</p>
-                    
+
                 <Segment>
                     <h3 className="party-detail-header">Day:</h3>
                     <p className="party-detail-body">{date.toFormat('cccc')}</p>

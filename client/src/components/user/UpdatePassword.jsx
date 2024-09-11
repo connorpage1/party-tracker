@@ -1,6 +1,6 @@
 import * as yup from "yup";
 import { Formik, Field, ErrorMessage } from "formik";
-import { Modal, Button, Form } from "semantic-ui-react";
+import { Modal, Button, Form, Message } from "semantic-ui-react";
 import { useContext, useState } from "react";
 import toast from "react-hot-toast";
 import { GlobalContext } from "../../context/GlobalProvider";
@@ -82,8 +82,8 @@ const UpdatePassword = () => {
                 </Form.Field>
                 <ErrorMessage
                   name="current_password"
-                  component="div"
-                  className="field-error"
+                  component={Message}
+                  negative
                 />
                 <Form.Field>
                   <label htmlFor="password_hash">New Password</label>
@@ -91,8 +91,8 @@ const UpdatePassword = () => {
                 </Form.Field>
                 <ErrorMessage
                   name="password_hash"
-                  component="div"
-                  className="field-error"
+                  component={Message}
+                  negative
                 />
                 <Form.Field>
                   <label htmlFor="confirmPassword">Confirm New Password</label>
@@ -104,8 +104,8 @@ const UpdatePassword = () => {
                 </Form.Field>
                 <ErrorMessage
                   name="confirmPassword"
-                  component="div"
-                  className="field-error"
+                  component={Message}
+                  negative
                 />
                 <Button
                   type="submit"

@@ -66,11 +66,26 @@ def seed_data():
         
         parties = []
         for _ in range(100):
-            theme = fake.word()
+            theme = rc([fake.word(), None])
             start = fake.date_time_between(start_date='now', end_date='+1y')
-            duration = rc([1, 1.5, 2, 2.5, 3, 3.5])
-            status = randint(1, 8)
-            org = fake.word()
+            duration = rc([1.5, 2, 2.5, 3, 3.5])
+            status = randint(1, 7)
+            org = rc([fake.word(), None])
+            customer = rc([customer.id for customer in customers])
+            user = rc([user.id for user in users])
+            guests = randint(50, 250)
+            location = randint (1, 9)
+            
+            party = Party(theme=theme, date_and_start_time=start, duration=duration, status_id=status, organization=org, customer_id=customer, user_id=user, guest_number=guests, location_id=location)
+            
+            db.session.add(party)
+            parties.append(party)
+        for _ in range(100):
+            theme = rc([fake.word(), None])
+            start = fake.date_time_between(start_date='-1y', end_date='now')
+            duration = rc([1.5, 2, 2.5, 3, 3.5])
+            status = randint(1, 7)
+            org = rc([fake.word(), None])
             customer = rc([customer.id for customer in customers])
             user = rc([user.id for user in users])
             guests = randint(50, 250)

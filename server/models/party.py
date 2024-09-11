@@ -121,8 +121,7 @@ class Party(db.Model, SerializerMixin):
                 'food_tip': food_tip,
                 'bar_tip': bar_tip,
                 'subtotal': subtotal,
-                'total': total
-                    
+                'total': total     
                 }
     def to_dict_custom(self):
         return {

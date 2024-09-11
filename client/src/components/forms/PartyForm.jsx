@@ -9,6 +9,7 @@ import _ from 'lodash';
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { GlobalContext } from '../../context/GlobalProvider';
+import responseParser from '../error-handling/response_parser';
 
 const locationOptions = [
     { key: '1', text: 'Little House and Grass', value: '1' },
@@ -62,7 +63,7 @@ const initialValues = {
     customer_last_name: '',
     customer_phone_number: '',
     selectedPackages: [],
-    discount: '',
+    discount: 0,
     packageDescriptions: {}
 }
 
@@ -88,10 +89,9 @@ const PartyForm = () => {
                 res.json()
                 .then(setPackages)
             } else {
-                const error = res.json()
-                throw error
+                throw responseParser(res)
             }
-        }).catch(console.log)
+        }).catch(error => toast.error(error.error))
     }, [])
 
     const packageOptions = packages.map(newPackage => ({
@@ -117,7 +117,7 @@ const PartyForm = () => {
             resetForm();
             navigate('/parties');
         } catch (error) {
-            console.error("Error handling form submission:", error);
+            toast.error(error.error)
         }
     };
     

@@ -27,7 +27,7 @@ const PackageCreationForm = () => {
     });
 
     const handleFormSubmit = async (values, { setSubmitting, resetForm }) => {
-        await fetch('/api/v1/packages', {
+        response = await fetch('/api/v1/packages', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

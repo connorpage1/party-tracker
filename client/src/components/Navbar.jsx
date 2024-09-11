@@ -2,6 +2,8 @@ import { Menu, MenuItem, Button} from "semantic-ui-react"
 import { NavLink, useNavigate } from "react-router-dom"
 import { useContext } from "react"
 import { GlobalContext } from "../context/GlobalProvider"
+import responseParser from "./error-handling/response_parser"
+import toast from "react-hot-toast"
 
 const Navbar =  () => {
     const { user, JWTHeader, updateUser} = useContext(GlobalContext)
@@ -18,10 +20,9 @@ const Navbar =  () => {
                 updateUser(null)
                 navigate('/')
             } else {
-                error = res.json()
-                throw error
+                throw responseParser(res)
             }
-        }).catch(console.log)
+        }).catch(error => toast.error(error.error))
     }
     return(
         <div>

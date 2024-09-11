@@ -1,4 +1,6 @@
 import {createContext, useEffect, useState} from "react";
+import responseParser from "../components/error-handling/response_parser";
+import toast from "react-hot-toast";
 
 export const GlobalContext = createContext()
 
@@ -26,9 +28,9 @@ const GlobalProvider = ({ children }) => {
                 res.json()
                 .then(setUser)
             } else {
-                throw res.json()
+                throw responseParser(res)
             }
-        }).catch(console.log)
+        }).catch(error => toast.error(error.error))
     }, [])
 
     const updateUser = (value) => {

@@ -2,6 +2,7 @@ import { useContext, useState, useEffect } from "react"
 import { GlobalContext } from "../../context/GlobalProvider"
 import { Button } from "semantic-ui-react"
 import UpdatePassword from "./UpdatePassword"
+import responseParser from "../error-handling/response_parser"
 
 
 const UserProfile = () => {
@@ -18,14 +19,11 @@ const UserProfile = () => {
             if (res.ok) {
                 res.json()
                 .then(setProfile)
-            } else if (res.status == 401){
-                console.log('Unauthorized') //Change this to a global error function
-            }
+            } 
             else {
-                const error = res.json()
-                throw error
+                throw responseParser(res)
             }
-        }).catch(console.log)
+        }).catch(error => toast.error(error.error))
     }, [])
     if (!profile) {
         return (<h4>Loading...</h4>)

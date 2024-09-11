@@ -32,7 +32,7 @@ const DeletePartyModal = ({ id }) => {
                 error = res.json()
                 throw error
             }
-        }).catch(console.log)
+        }).catch(error => toast.error(error.error))
     }
 
 

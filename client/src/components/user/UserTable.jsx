@@ -31,7 +31,7 @@ const UserTable = () => {
                 const error = data.error || data.msg 
                 throw(error)
             }})
-            .catch(console.log)
+            .catch(toast.error(error))
 
     }, [])
     

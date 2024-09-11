@@ -33,7 +33,7 @@ const PartyTable = () => {
     //     payload = `?year=${dateDisplay.year}&month=${dateDisplay.month}&day=${dateDisplay.day}`
     // }
 
-    const url = `/api/v1/parties`
+    const url = `/api/v1/parties?future=True`
     
     useEffect(()=> {
         fetch(url, {
@@ -50,7 +50,7 @@ const PartyTable = () => {
                 const error = data.error || data.msg 
                 throw(error)
             }})
-            .catch(console.log)
+            .catch(error => toast.error(error))
 
     }, [])
     return (
@@ -81,7 +81,7 @@ const PartyTable = () => {
                                     <TableCell>{end_time.toLocaleString(DateTime.TIME_SIMPLE)}</TableCell>
                                     <TableCell>{party.location}</TableCell>
                                     <TableCell>{party.guest_number}</TableCell>
-                                    <TableCell>{party.organization ? party.organization : party.customer.last_name}</TableCell>
+                                    <TableCell>{party.organization || party.customer.last_name}</TableCell>
                                     <TableCell>{party.status}</TableCell>
                                 </TableRow>
                         )})}

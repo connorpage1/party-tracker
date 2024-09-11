@@ -5,6 +5,7 @@ import { useContext, useState } from "react"
 import { Button, Message, Modal, Form as SemanticForm, Label, Dropdown } from "semantic-ui-react";
 import { GlobalContext } from "../../context/GlobalProvider";
 import { useParams } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const locationOptions = [
     { key: '1', text: 'Little House and Grass', value: '1' },
@@ -99,7 +100,7 @@ const EditPartyModal = ({ party, updateParty }) => {
                     })
                 }
             }).catch(err => {
-                console.log(err)
+                toast.error(err.error)
                 setSubmitting(false)
             })
     }
