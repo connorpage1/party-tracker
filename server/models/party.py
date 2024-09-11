@@ -48,7 +48,7 @@ class Party(db.Model, SerializerMixin):
     party_packages = db.relationship("PartyPackage", back_populates='party', cascade='all, delete-orphan')
     packages = association_proxy('party_packages', 'package')
     
-    serialize_only = ('id', 'theme', 'date_and_start_time', 'end_time', 'status')
+    serialize_only = ('id', 'theme', 'date_and_start_time', 'end_time', 'status', 'totals', 'guest_number', 'location', 'status')
     
     @property
     def end_time(self):

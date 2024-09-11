@@ -11,6 +11,8 @@ import Unauthorized from "../components/error-handling/error-pages/Unauthorized"
 import NotFound from "../components/error-handling/error-pages/NotFound";
 import NewUserForm from "../components/user/NewUserForm";
 import UserTable from "../components/user/UserTable";
+import CustomerTable from "../components/customers/CustomerTable";
+import CustomerDetail from "../components/customers/CustomerDetail";
 
 export const router = createBrowserRouter([
   {
@@ -57,8 +59,15 @@ export const router = createBrowserRouter([
         {
           path: '/users/new',
           element: <NewUserForm />
-        }, 
-        
+        },
+        {
+          path: '/customers',
+          element: <CustomerTable />
+        },
+        {
+          path: '/customers/:id',
+          element: <CustomerDetail />
+        }
 
     ]
   }
