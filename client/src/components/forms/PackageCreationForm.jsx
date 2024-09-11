@@ -3,6 +3,7 @@ import { Formik, Field, Form, ErrorMessage } from 'formik';
 import { Button, Segment, Header, Message, Form as SemanticForm, Dropdown, Checkbox, Popup, Icon } from 'semantic-ui-react';
 import * as yup from 'yup';
 import { GlobalContext } from '../../context/GlobalProvider';
+import toast from 'react-hot-toast';
 
 // Package type options based on your model's types
 const packageTypeOptions = [
@@ -27,18 +28,27 @@ const PackageCreationForm = () => {
     });
 
     const handleFormSubmit = async (values, { setSubmitting, resetForm }) => {
-        response = await fetch('/api/v1/packages', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                ...JWTHeader
-            },
-            body: JSON.stringify(values),
-        });
+        try {
+            const response = await fetch('/api/v1/packages', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...JWTHeader
+                },
+                body: JSON.stringify(values),
+            });
+            if (response.ok) {
+                resetForm();
+                setSubmitting(false);
+                toast.success('Package created successfully!');
+            } else {
+                const errorData = await response.json()
+                toast.error(errorData.error)
+            
+            }
 
-        resetForm();
-        setSubmitting(false);
-        alert('Package created successfully!');
+        }catch (error) {
+            toast.error(error.message || 'An error occurred')        }
     };
 
     return (
@@ -55,7 +65,7 @@ const PackageCreationForm = () => {
                 validationSchema={validationSchema}
                 onSubmit={handleFormSubmit}
             >
-                {({ isSubmitting, setFieldValue, values }) => (
+                {({ isSubmitting, setFieldValue, values, setFieldTouched}) => (
                     <Form className="ui form">
                         {/* Package Name */}
                         <SemanticForm.Field>

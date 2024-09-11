@@ -10,7 +10,7 @@ const Navbar =  () => {
     const navigate = useNavigate()
     
     const logout = () => {
-        fetch('api/v1/logout', {
+        fetch('/api/v1/logout', {
             method: 'DELETE',
             headers: {
                 ...JWTHeader
@@ -20,7 +20,7 @@ const Navbar =  () => {
                 updateUser(null)
                 navigate('/')
             } else {
-                throw responseParser(res)
+                throw {'error': 'Error logging out'}
             }
         }).catch(error => toast.error(error.error))
     }
@@ -38,6 +38,9 @@ const Navbar =  () => {
                 </Menu.Item>
                 <Menu.Item as={NavLink} to='/packages/new' header>
                     New Package
+                </Menu.Item>
+                <Menu.Item as={NavLink} to='/customers' header>
+                    Customers
                 </Menu.Item>
                 <Menu.Item as={NavLink} to='/profile' header>
                     Profile

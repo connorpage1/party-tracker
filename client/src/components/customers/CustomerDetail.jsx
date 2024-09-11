@@ -40,7 +40,7 @@ const CustomerDetail = () => {
                     <p><b>Phone: </b>{phone}</p>
                     <div className="party-container">
                         <h4>Parties</h4>
-                        {parties.map(party => {
+                        {parties ? parties.map(party => {
                             const { date_and_start_time, end_time, guest_number, totals} = party 
                             const date = DateTime.fromSQL(date_and_start_time)
                             const end = DateTime.fromSQL(end_time)
@@ -54,7 +54,7 @@ const CustomerDetail = () => {
 
                                 </Segment>
                             )
-                        })}
+                        }):<p>Loading</p>}
                     </div>
                 </div>
         )

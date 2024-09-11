@@ -9,6 +9,7 @@ import {
 } from "semantic-ui-react"
 import { GlobalContext } from "../../context/GlobalProvider"
 import { useNavigate } from "react-router-dom"
+import toast from "react-hot-toast"
 
 const UserTable = () => {
     const { JWTHeader, user } = useContext(GlobalContext)
@@ -31,7 +32,7 @@ const UserTable = () => {
                 const error = data.error || data.msg 
                 throw(error)
             }})
-            .catch(toast.error(error))
+            .catch(error => toast.error(error))
 
     }, [])
     

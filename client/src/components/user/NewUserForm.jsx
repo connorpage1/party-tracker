@@ -124,7 +124,7 @@ const NewUserForm = () => {
                                         type='text'
                                         as={SemanticForm.Input}
                                         onBlur={async (e) => {
-                                            console.log("onBlur triggered for username")
+                                            setFieldTouched('username', true)
                                             const error = await checkUserExists('username', e.target.value);
                                             if (error) {
                                                 console.log("Username error", error)
@@ -145,10 +145,12 @@ const NewUserForm = () => {
                                         type='text'
                                         as={SemanticForm.Input}
                                         onBlur={async (e) => {
+                                            setFieldTouched('email', true)
                                             const error = await checkUserExists('email', e.target.value);
                                             if (error) {
                                                 console.log("Email error", error)
                                                 setFieldError('email', error)
+                                                debugger
                                             }
                                             else {
                                                 setFieldError('email', '')
