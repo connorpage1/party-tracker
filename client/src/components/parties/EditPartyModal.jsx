@@ -177,7 +177,7 @@ const EditPartyModal = ({ party, updateParty }) => {
                                             />
                                         )}
                                     </Field>
-                                    <ErrorMessage name="status" component={Label} color="red" pointing />
+                                    <ErrorMessage name="status" component={Message} negative />
                                 </SemanticForm.Field>
 
                                 {/* Organization Field */}

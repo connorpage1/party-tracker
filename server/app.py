@@ -13,6 +13,7 @@ from server.routes.customer_routes import Customers, CustomerById
 from server.routes.authentication import Login, Logout, Me, Profile
 from server.routes.package_routes import Packages
 from server.routes.party_package_routes import PartyPackages
+from server.routes.user_routes import Users
 
 
 from flask_jwt_extended import (
@@ -48,6 +49,7 @@ api.add_resource(Logout, '/logout')
 api.add_resource(Me, '/me')
 api.add_resource(PartyPackages, '/party-packages')
 api.add_resource(Profile, '/profile')
+api.add_resource(Users, '/users')
 
 if __name__ == "__main__":
     app.run(port=5555, debug=False)

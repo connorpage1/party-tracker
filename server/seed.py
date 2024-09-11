@@ -27,20 +27,23 @@ def seed_data():
         Customer.query.delete()
         User.query.delete()
         
-        admin = User(name="Connor", username="connor", email='connor@page.com', password_hash='password', role='admin')
+        admin = User(first_name="Connor", last_name="Page", username="connor", email='connor@page.com', password_hash='password', role='admin')
+        manager = User(first_name="Test", last_name="Manager", username="manager", email='manager@test.com', password_hash='password', role='manager')
         
         db.session.add(admin)
+        db.session.add(manager)
         db.session.commit()
         
         users = []
         for _ in range(20):
-            name=fake.name()
+            first_name=fake.first_name()
+            last_name=fake.last_name()
             username=fake.user_name()
             email=fake.email()
             password_hash = 'password'
             role_id = 2
             
-            user = User(name=name, username=username, email=email, password_hash=password_hash, role_id=role_id)
+            user = User(first_name=first_name, last_name=last_name, username=username, email=email, password_hash=password_hash, role_id=role_id)
             
             db.session.add(user)
             users.append(user)

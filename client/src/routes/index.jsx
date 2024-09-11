@@ -7,11 +7,15 @@ import PartyForm from "../components/forms/PartyForm";
 import PartyDetail from "../components/parties/PartyDetail";
 import PackageCreationForm from "../components/forms/PackageCreationForm";
 import UserProfile from "../components/user/UserProfile";
+import Unauthorized from "../components/error-pages/Unauthorized";
+import NotFound from "../components/error-pages/NotFound";
+import NewUserForm from "../components/user/NewUserForm";
 
 export const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
+    errorElement: <NotFound />,
     children: [
         {
             index: true,
@@ -40,6 +44,14 @@ export const router = createBrowserRouter([
         {
           path: '/profile',
           element: <UserProfile />
+        },
+        {
+          path: '/unauthorized',
+          element: <Unauthorized />
+        },
+        {
+          path: '/users/new',
+          element: <NewUserForm />
         }
 
     ]

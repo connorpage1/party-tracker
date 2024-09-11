@@ -10,3 +10,4 @@ from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 from datetime import datetime, timedelta
 from server.config import app
+from dotenv import load_dotenv

@@ -17,6 +17,8 @@ flask-bcrypt = "*"
 flask-session = "*"
 flask-jwt-extended = "*"
 sendgrid = "*"
+secrets = "*"
+python-dotenv = "*"
 
 [requires]
 python_full_version = "3.8.13"

@@ -5,9 +5,12 @@ class User(db.Model, SerializerMixin):
     
     ROLE_ADMIN = 1
     ROLE_MANAGER = 2
+    ROLE_BARTENDER = 3
+    ROLE_CUSTOMER = 4
     
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String)
+    first_name = db.Column(db.String)
+    last_name = db.Column(db.String)
     username = db.Column(db.String, unique=True, nullable=False)
     email = db.Column(db.String, unique=True, nullable=False)
     _password_hash = db.Column('password', db.String, nullable=False)
@@ -16,7 +19,7 @@ class User(db.Model, SerializerMixin):
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
     
-    serialize_only = ("username", "id", "role_id", 'name')
+    serialize_only = ("username", "id", "role_id", 'first_name', "last_name")
     
     parties = db.relationship('Party', back_populates='user')
     
@@ -56,6 +59,11 @@ class User(db.Model, SerializerMixin):
             return "admin"
         elif self.role_id == self.ROLE_MANAGER:
             return "manager"
+        elif self.role_id == self.ROLE_BARTENDER:
+            return "bartender"
+        elif self.role_id == self.ROLE_CUSTOMER:
+            return "customer"
+        
         else:
             return "unknown"
 
@@ -66,5 +74,9 @@ class User(db.Model, SerializerMixin):
             self.role_id = self.ROLE_ADMIN
         elif role_name == "manager":
             self.role_id = self.ROLE_MANAGER
+        elif role_name == "bartender":
+            self.role_id = self.ROLE_BARTENDER
+        elif role_name == "customer":
+            self.role_id = self.ROLE_CUSTOMER
         else:
             raise ValueError("Invalid role name")

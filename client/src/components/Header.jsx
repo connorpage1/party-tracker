@@ -36,7 +36,7 @@ const Header = () => {
             <Image src='/tchoup-black.png' size='tiny' />
             <h2>Party Tracker</h2>
             <div className="header-logout">
-                <p>Hello, {user.name}</p>
+                <p>Hello, {user.first_name}</p>
                 <Button size='mini' onClick={logout}>Logout</Button>
             </div>
             <Navbar />

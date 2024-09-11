@@ -32,7 +32,7 @@ const UserProfile = () => {
     else { 
         return (
             <div className="user-profile">
-                <h3>User: {profile.name}</h3>
+                <h3>User: {profile.first_name} {profile.last_name}</h3>
                 <p><b>Email: </b>{profile.email}</p>
                 <p><b>Username: </b>{profile.username}</p>
                 <p><b>Role: </b>{profile.role}</p>

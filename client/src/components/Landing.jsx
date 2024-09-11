@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { GlobalContext } from "../context/GlobalProvider";
 import { useNavigate } from "react-router-dom";
 import { Button } from "semantic-ui-react";
+import Dashboard from "./Dashboard";
 
 const Landing = () => {
     const { user } = useContext(GlobalContext)
@@ -19,7 +20,12 @@ const Landing = () => {
         );
     } else {
         return(
-            <h1>Welcome, {user.name}</h1>
+            <div className="landing-with-user">
+                <h1>Welcome, {user.first_name}</h1>
+                <Dashboard />
+
+            </div>
+            
         )
     }
 }
