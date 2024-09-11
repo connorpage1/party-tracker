@@ -102,3 +102,7 @@ button:focus-visible {
   margin-left: auto;
   float: right;
 }
+
+.header-logout p {
+  color: #ccc;
+}

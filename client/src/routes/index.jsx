@@ -7,9 +7,10 @@ import PartyForm from "../components/forms/PartyForm";
 import PartyDetail from "../components/parties/PartyDetail";
 import PackageCreationForm from "../components/forms/PackageCreationForm";
 import UserProfile from "../components/user/UserProfile";
-import Unauthorized from "../components/error-pages/Unauthorized";
-import NotFound from "../components/error-pages/NotFound";
+import Unauthorized from "../components/error-handling/error-pages/Unauthorized";
+import NotFound from "../components/error-handling/error-pages/NotFound";
 import NewUserForm from "../components/user/NewUserForm";
+import UserTable from "../components/user/UserTable";
 
 export const router = createBrowserRouter([
   {
@@ -50,9 +51,14 @@ export const router = createBrowserRouter([
           element: <Unauthorized />
         },
         {
+          path: '/users',
+          element: <UserTable />
+        },
+        {
           path: '/users/new',
           element: <NewUserForm />
-        }
+        }, 
+        
 
     ]
   }

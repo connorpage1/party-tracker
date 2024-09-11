@@ -1,6 +1,7 @@
 import { useContext, useState, useEffect } from "react"
 import { GlobalContext } from "../../context/GlobalProvider"
 import { Button } from "semantic-ui-react"
+import UpdatePassword from "./UpdatePassword"
 
 
 const UserProfile = () => {
@@ -39,7 +40,7 @@ const UserProfile = () => {
                 <p>Username and password are user configurable.
                     To change your role or to deactivate your 
                     account please contact your system administrator.</p>
-                    <Button>Change Username or Email</Button><Button>Change Password</Button>
+                    <Button>Change Username or Email</Button><UpdatePassword />
                 <p><b>Last updated: </b>{profile.updated_at || profile.created_at}</p>
 
             </div>

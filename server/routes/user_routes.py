@@ -11,9 +11,11 @@ from server.routes.__init__ import (
     secrets,
     string
 )
+from server.wrappers.jwt_role_required import role_required
 
 class Users(Resource):
     @jwt_required()
+    @role_required('admin')
     def get(self):
         try:
             verify_jwt_in_request()
@@ -56,3 +58,38 @@ def generate_pw(length):
     characters = string.ascii_letters + string.digits + string.punctuation
     
     return ''.join(secrets.choice(characters) for _ in range(length))
+
+class UserById(Resource):
+    @jwt_required()
+    def get(self, id):
+        try:
+            if user := db.session.get(User, id):
+                return make_response(user.to_dict(), 200)
+            return make_response({'error': f'No user with id {id}'}, 404)
+        except Exception as e:
+            return make_response({'error': str(e)}, 400)
+    @jwt_required()
+    def patch(self, id):
+        try:
+            if user := db.session.get(User, id):
+                data = request.get_json()
+                for attr, value in data.items():
+                    setattr(user, attr, value)
+                db.session.commit()
+                return make_response(user.to_dict(), 200)
+            return make_response({'error': f'No user with id {id}'}, 404)
+        except Exception as e:
+            db.session.rollback()
+            return make_response({'error': str(e)}, 400)
+
+    @jwt_required()
+    def delete(self, id):
+        try:
+            if user := db.session.get(User, id):
+                db.session.delete(user)
+                db.session.commit()
+                return make_response({}, 204)
+            return make_response({'error': f'No user with id {id}'}, 404)
+        except Exception as e:
+            db.session.rollback()
+            return make_response({'error': str(e)}, 400)

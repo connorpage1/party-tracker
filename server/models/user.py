@@ -19,7 +19,7 @@ class User(db.Model, SerializerMixin):
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
     
-    serialize_only = ("username", "id", "role_id", 'first_name', "last_name")
+    serialize_only = ("username", "id", "role_id", 'first_name', "last_name", "role")
     
     parties = db.relationship('Party', back_populates='user')
     
@@ -43,6 +43,7 @@ class User(db.Model, SerializerMixin):
         self._password_hash = hashed_pw
         
     def authenticate(self, pw_to_check):
+        print("Inside authenticate")
         return flask_bcrypt.check_password_hash(self._password_hash, pw_to_check)
     
     @validates("email")

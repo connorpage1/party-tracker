@@ -23,8 +23,7 @@ class Login(Resource):
             elif user := User.query.filter_by(username=username_or_email).first():
                 if user.authenticate(data.get("password_hash")):
                     return self.make_jwt_response(user)
-            else:
-                return make_response(
+            return make_response(
                     {"error": "Incorrect username/email or password"}, 401
                 )
         except Exception as e:
@@ -78,17 +77,15 @@ class Profile(Resource):
     def patch(self): 
         try:
             # verify_jwt_in_request()
+            data = request.get_json()
             user = current_user
-            data = request.json()
-            if "pwupdate" in request.args and not user.authenticate(
-                data.get("current_password")
-            ):
-                return make_response({'error': 'Incorrect password'}, 401)
+            if "pwupdate" in request.args and not user.authenticate(data.get("current_password")):
+                    return make_response({"error": "Incorrect password"}, 401)
             for attr, value in data.items():
                 setattr(user, attr, value)
             db.session.commit()
             return make_response(user.to_dict(), 200)
-            
+
         except Exception as e:
             db.session.rollback()
             make_response({'error': str(e)}, 400) 

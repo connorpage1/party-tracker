@@ -1,6 +1,6 @@
 import { useContext } from "react"
-import Header from "../Header"
-import { GlobalContext } from "../../context/GlobalProvider"
+import Header from "../../Header"
+import { GlobalContext } from "../../../context/GlobalProvider"
 import { Button } from "semantic-ui-react"
 import { useNavigate } from "react-router-dom"
 
