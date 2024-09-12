@@ -106,3 +106,7 @@ button:focus-visible {
 .header-logout p {
   color: #ccc;
 }
+
+.ui.raised.segment.upcoming-parties div {
+  margin: 0;
+}

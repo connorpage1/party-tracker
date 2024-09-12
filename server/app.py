@@ -1,19 +1,16 @@
 import os
 
-from server.models.contract import Contract
-from server.models.customer import Customer
+
 from server.models.user import User
-from server.models.party import Party
-from server.models.package import Package
-from server.models.party_package import PartyPackage
 
 from server.config import app, db, api, jwt
-from server.routes.party_routes import Parties, PartiesById
+from server.routes.party_routes import Parties, PartiesById, ChartData
 from server.routes.customer_routes import Customers, CustomerById
 from server.routes.authentication import Login, Logout, Me, Profile
 from server.routes.package_routes import Packages
 from server.routes.party_package_routes import PartyPackages
 from server.routes.user_routes import Users, UserById
+
 
 
 from flask_jwt_extended import (
@@ -51,6 +48,7 @@ api.add_resource(PartyPackages, '/party-packages')
 api.add_resource(Profile, '/profile')
 api.add_resource(Users, '/users')
 api.add_resource(UserById, '/users/<int:id>')
+api.add_resource(ChartData, '/parties/revenue_by_month')
 
 if __name__ == "__main__":
     app.run(port=5555, debug=False)

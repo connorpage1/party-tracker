@@ -96,3 +96,36 @@ class PartiesById(Resource):
         except Exception as e:
             db.session.rollback()
             return make_response({"error": str(e)}, 400)
+
+class ChartData(Resource):
+    def get(self):
+        parties = db.session.scalars(db.select(Party)).all()
+        
+        years = {}
+        
+        for party in parties:
+            year = party.date_and_start_time.year
+            month = party.date_and_start_time.strftime('%B')  # Get the full month name
+            subtotal = party.totals['subtotal']  # Access the computed subtotal from the property
+
+            # Initialize a new revenue_by_month for the year if it doesn't exist
+            if year not in years:
+                years[year] = {
+                    'January': 0,
+                    'February': 0,
+                    'March': 0,
+                    'April': 0,
+                    'May': 0,
+                    'June': 0,
+                    'July': 0,
+                    'August': 0,
+                    'September': 0,
+                    'October': 0,
+                    'November': 0,
+                    'December': 0
+                }
+            
+            # Add the subtotal to the correct month
+            years[year][month] += subtotal
+
+        return make_response(years, 200)

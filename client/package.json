@@ -11,12 +11,18 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@canvasjs/charts": "^3.10.7",
+    "@canvasjs/react-charts": "^1.0.2",
+    "@fullcalendar/core": "^6.1.15",
+    "@fullcalendar/daygrid": "^6.1.15",
+    "@fullcalendar/react": "^6.1.15",
     "dateformat": "^5.0.3",
     "formik": "^2.4.6",
     "luxon": "^3.5.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-hot-toast": "^2.4.1",
+    "react-loader-spinner": "^6.1.6",
     "react-phone-number-input": "^3.4.5",
     "react-router-dom": "^6.26.1",
     "semantic-ui-css": "^2.5.0",

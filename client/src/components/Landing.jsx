@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { GlobalContext } from "../context/GlobalProvider";
 import { useNavigate } from "react-router-dom";
 import { Button } from "semantic-ui-react";
-import Dashboard from "./Dashboard";
+import Dashboard from "./dashboard/Dashboard";
 
 const Landing = () => {
     const { user } = useContext(GlobalContext)

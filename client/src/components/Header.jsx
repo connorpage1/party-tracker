@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { Image, Button} from "semantic-ui-react";
+import { Image, Button, Grid} from "semantic-ui-react";
 import { GlobalContext } from "../context/GlobalProvider";
 import { useNavigate } from "react-router-dom";
 import Navbar from "./Navbar";
@@ -9,18 +9,23 @@ const Header = () => {
 
     if(!user) {
         return(
-            <div className="header">
-                <Image src='/tchoup-black.png' size='tiny' />
-                <h2>Party Tracker</h2>
-            </div>
+            <header>
+                <Grid>
+
+                    <Image src='/tchoup-black.png' size='tiny' />
+                    <h2>Party Tracker</h2>
+                </Grid>
+            </header>
         )
     }
     return (
-        <div className="header">
-            <Image src='/tchoup-black.png' size='tiny' />
-            <h2>Party Tracker</h2>
+        <header className="header">
+            <Grid>
+                <Image src='/tchoup-black.png' size='tiny' />
+                <h2>Party Tracker</h2>
+            </Grid>
             <Navbar />
-        </div>
+        </header>
     );
 }
 
