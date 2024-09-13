@@ -74,8 +74,10 @@ const Dashboard = () => {
                     </Table>
                 </Segment>
             </Grid>
+            <Segment raised >
+                <RevenueChart />
 
-            <RevenueChart />
+            </Segment>
 
         </div>
     )

@@ -1,7 +1,6 @@
 import FullCalendar from '@fullcalendar/react'
-import dayGridPlugin from '@fullcalendar/daygrid' // a plugin!
+import dayGridPlugin from '@fullcalendar/daygrid' 
 import { DateTime } from 'luxon'
-import { date } from 'yup'
 
 const Calendar = ({ parties })  => {
     
