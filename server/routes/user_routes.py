@@ -81,7 +81,7 @@ class UserById(Resource):
     def get(self, id):
         try:
             if user := db.session.get(User, id):
-                return make_response(user.to_dict(), 200)
+                return make_response(user.to_dict(rules=('created_at', 'updated_at', 'email')), 200)
             return make_response({'error': f'No user with id {id}'}, 404)
         except Exception as e:
             return make_response({'error': str(e)}, 400)

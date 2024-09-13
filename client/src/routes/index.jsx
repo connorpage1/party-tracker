@@ -13,6 +13,7 @@ import NewUserForm from "../components/user/NewUserForm";
 import UserTable from "../components/user/UserTable";
 import CustomerTable from "../components/customers/CustomerTable";
 import CustomerDetail from "../components/customers/CustomerDetail";
+import UserDetail from "../components/user/AdminUserDetail";
 
 export const router = createBrowserRouter([
   {
@@ -67,6 +68,10 @@ export const router = createBrowserRouter([
         {
           path: '/customers/:id',
           element: <CustomerDetail />
+        },
+        {
+          path: '/users/:id',
+          element: <UserDetail />
         }
 
     ]
