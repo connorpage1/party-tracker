@@ -48,9 +48,9 @@ const LoginForm = () => {
                         })
                 } else {
                     res.json().then((error) => {
-                        if (error.error === "Incorrect email or password") {
+                        if (error.error === "Incorrect username/email or password") {
                             setErrors({
-                                password_hash: "Incorrect email or password",
+                                password_hash: "Incorrect username/email or password",
                             });
                         } else {
                             toast.error(error.error || "An unexpected error occurred");

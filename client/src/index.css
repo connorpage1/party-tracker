@@ -112,26 +112,26 @@ button:focus-visible {
 }
 
 header {
-  width: 100%; /* Full width */
-  background-color: #242424; /* Match the background color for a uniform look */
-  color: white; /* Text color */
+  width: 100%; 
+  background-color: #242424; 
+  color: white; 
   text-align: center;
   padding-top: 100px;
-  z-index: 10000; /* Ensure the header stays on top of the navbar */
+  z-index: 10000; 
   position: absolute;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3); /* Add shadow to make it pop */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3); 
 }
 
-/* Navbar (menu) styles */
+
 .menu {
   position: fixed;
   top: 0;
   width: 100%;
-  background-color: #333; /* Dark background for contrast */
+  background-color: #333; 
   z-index: 5;
   padding: 15px 0;
   text-align: center;
-  transition: background-color 0.3s ease; /* Smooth transition */
+  transition: background-color 0.3s ease;
 }
 
 .menu a {
@@ -163,4 +163,35 @@ header {
     font-size: 16px;
     padding: 8px 15px;
   }
+}
+
+.ui.segment {
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Adds shadow for depth */
+  border-radius: 10px; /* Rounded corners */
+  padding: 20px;
+  background-color: #f9f9f9; /* Light background */
+}
+
+.ui.grid {
+  margin-top: 20px;
+}
+
+.ui.grid > .column {
+  padding: 40px; /* Adds padding inside each column */
+}
+
+
+.ui.popup {
+  padding: 10px !important; /* Adjust padding as needed */
+}
+
+/* Ensure the popup content is compact */
+.ui.popup .content {
+  margin: 0 !important;
+  padding: 5px !important;
+}
+
+/* Optional: Reduce the arrow size */
+.ui.popup:before {
+  border-width: 7px !important; /* Adjust to make the popup arrow smaller */
 }
