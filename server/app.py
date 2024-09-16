@@ -1,7 +1,7 @@
 import os
 
 
-from server.models.user import User
+from user import User
 
 from server.config import app, db, api, jwt
 from server.routes.party_routes import Parties, PartiesById, ChartData
