@@ -262,7 +262,6 @@ const PartyForm = () => {
         setSelectedPackages(value);  // Update the selected packages
     };
 
-
     return (
         <div className="party-form">
             <Header as="h2" textAlign="center">

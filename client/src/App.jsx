@@ -11,7 +11,9 @@ function App() {
     <>
       <Toaster />
       <Header />
-      <Outlet />
+      <div className='content'>
+        <Outlet />
+      </div>
     </>
   )
 }

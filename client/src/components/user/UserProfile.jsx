@@ -35,10 +35,10 @@ const UserProfile = () => {
                 <p><b>Email: </b>{profile.email}</p>
                 <p><b>Username: </b>{profile.username}</p>
                 <p><b>Role: </b>{profile.role}</p>
-                <p>Username and password are user configurable.
+                <p>Passwords are user configurable.
                     To change your role or to deactivate your 
                     account please contact your system administrator.</p>
-                    <Button>Change Username or Email</Button><UpdatePassword />
+                    <UpdatePassword />
                 <p><b>Last updated: </b>{profile.updated_at || profile.created_at}</p>
 
             </div>

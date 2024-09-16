@@ -45,7 +45,7 @@ const CustomerDetail = () => {
                             const date = DateTime.fromSQL(date_and_start_time)
                             const end = DateTime.fromSQL(end_time)
                             return(
-                                <Segment key={party.id}>
+                                <Segment key={party.id} onClick={()=> navigate(`/parties/${party.id}`)}>
                                     <p><b>Date: </b>{date.toLocaleString(DateTime.DATE_SHORT)}</p>
                                     <p><b>Start Time: </b>{date.toLocaleString(DateTime.TIME_SIMPLE)}</p>
                                     <p><b>End Time: </b>{end.toLocaleString(DateTime.TIME_SIMPLE)}</p>
