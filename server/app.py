@@ -1,7 +1,8 @@
+from flask import Flask, render_template
 import os
 
 
-from user import User
+from server.models.user import User
 
 from server.config import app, db, api, jwt
 from server.routes.party_routes import Parties, PartiesById, ChartData
@@ -23,6 +24,26 @@ from flask_jwt_extended import (
     jwt_required
     
 )
+
+# =================FE ROUTES=================
+# @app.route('/')
+# @app.route('/login')
+# @app.route('/parties')
+# @app.route('/parties/<int:id>')
+# @app.route('/parties/new')
+# @app.route('/packages/new')
+# @app.route('/profile')
+# @app.route('/unauthorized')
+# @app.route('/users')
+# @app.route('/users/<int:id>')
+# @app.route('/users/new')
+# @app.route('/customers')
+# @app.route('/customers/<int:id>')
+# def index(id=0):
+#     return render_template('index.html')
+
+#==========================================
+
 
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 DATABASE = os.environ.get("DB_URI", f"sqlite:///{os.path.join(BASE_DIR, 'app.db')}")
